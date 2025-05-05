@@ -28,14 +28,16 @@ public class Player extends Entity {
 
     public void getPlayerImage() {
         try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/image/boy_up_1.png")); // Load the player's up image
-            up2 = ImageIO.read(getClass().getResourceAsStream("/image/boy_up_2.png")); // Load the player's up image
-            down1 = ImageIO.read(getClass().getResourceAsStream("/image/boy_down_1.png")); // Load the player's down image
-            down2 = ImageIO.read(getClass().getResourceAsStream("/image/boy_down_2.png")); // Load the player's down image
-            left1 = ImageIO.read(getClass().getResourceAsStream("/image/boy_left_1.png")); // Load the player's left image
-            left2 = ImageIO.read(getClass().getResourceAsStream("/image/boy_left_2.png")); // Load the player's left image  
-            right1 = ImageIO.read(getClass().getResourceAsStream("/image/boy_right_1.png")); // Load the player's right image
-            right2 = ImageIO.read(getClass().getResourceAsStream("/image/boy_right_2.png")); // Load the player's right image
+            stand = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_stand.png")); // Load the player's standing image
+            // Load the player's images for different directions
+            up1 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_up_1.png")); // Load the player's up image
+            up2 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_up_2.png")); // Load the player's up image
+            down1 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_down_1.png")); // Load the player's down image
+            down2 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_down_2.png")); // Load the player's down image
+            left1 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_left_1.png")); // Load the player's left image
+            left2 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_left_2.png")); // Load the player's left image  
+            right1 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_right_1.png")); // Load the player's right image
+            right2 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_right_2.png")); // Load the player's right image
 
         } catch (Exception e) {
             e.printStackTrace(); // Print the stack trace for debugging
@@ -72,6 +74,9 @@ public class Player extends Entity {
                 spriteCounter = 0; // Reset the sprite counter
             }
         }
+        else {
+            direction = "stand"; // Set the direction to stand
+        }
     }
 
     public void draw(Graphics2D g2) {
@@ -79,6 +84,9 @@ public class Player extends Entity {
         // g2.fillRect(x, y, gp.tileSize, gp.tileSize); // Draw a filled rectangle
         BufferedImage image = null; // Initialize the image variable
         switch (direction) {
+            case "stand":
+                image = stand; // Set the image to the standing image
+                break;
             case "up":
                 if(spriteNum == 1) {
                     image = up1; // Set the image to the first up image
