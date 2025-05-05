@@ -1,12 +1,15 @@
+package main;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.RenderingHints.Key;
+
+import entity.Player;
 
 public class GamePanel extends JPanel implements Runnable {
     //screen settings
     final int originalTileSize = 16; // 16x16 tile
     final int scale = 3; // Scale the tile size
-    final int tileSize = originalTileSize * scale; // 48x48 tile
+    public final int tileSize = originalTileSize * scale; // 48x48 tile
     final int maxScreenCol = 16; // 16 tiles across
     final int maxScreenRow = 12; // 12 tiles down
     final int screenWidth = tileSize * maxScreenCol; // 768 pixels wide
@@ -15,6 +18,7 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH = new KeyHandler(); // Key handler for input
     Thread gameThread; // Thread for the game loop
 
+    Player player = new Player(this, keyH); // Player object
     // set player
     int playerX = 100; // Player's X position
     int playerY = 100; // Player's Y position
@@ -71,19 +75,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        // Update game logic here
-        if (keyH.upPressed == true) {
-            playerY -= playerSpeed; // Move up
-        }
-        else if (keyH.downPressed == true) {
-            playerY += playerSpeed; // Move down
-        }
-        if (keyH.leftPressed == true) {
-            playerX -= playerSpeed; // Move left
-        }
-        else if (keyH.rightPressed == true) {
-            playerX += playerSpeed; // Move right
-        }
+        player.update();
     }
 
     public void paintComponent(Graphics g) {
@@ -92,9 +84,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Draw the game elements here
         // Example: g2.drawRect(0, 0, tileSize, tileSize); // Draw a rectangle
-
-        g2.setColor(Color.WHITE);
-        g2.fillRect(playerX, playerY, tileSize, tileSize); // Draw a filled rectangle
+        player.draw(g2);
+        
         g2.dispose(); // Dispose of the graphics context
     }
 }
