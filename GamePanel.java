@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.RenderingHints.Key;
 
 public class GamePanel extends JPanel implements Runnable {
     //screen settings
@@ -11,12 +12,20 @@ public class GamePanel extends JPanel implements Runnable {
     final int screenWidth = tileSize * maxScreenCol; // 768 pixels wide
     final int screenHeight = tileSize * maxScreenRow; // 576 pixels high
 
+    KeyHandler keyH = new KeyHandler(); // Key handler for input
     Thread gameThread; // Thread for the game loop
+
+    // set player
+    int playerX = 100; // Player's X position
+    int playerY = 100; // Player's Y position
+    int playerSpeed = 4; // Player's speed
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true); // Enable double buffering for smoother graphics}
+        this.addKeyListener(keyH); // Add key listener for input
+        this.setFocusable(true); // Make the panel focusable to receive key events
     }
 
     public void startGameThread() {
@@ -27,21 +36,54 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     public void run() {
         // Game loop
+        double drawInterval = 1000000000 / 60; // Draw every 1/60th of a second
+        double delta = 0; // Time difference
+        long lastTime = System.nanoTime(); // Get the current time
+        long currentTime; // Variable to store the current time
+        long timer = 0;
+        int drawCount = 0;
 
         while (gameThread != null) {
-            // Update game logic here
-            System.out.println("the game loop is running");
 
-            // 1 UPDATE
-            update();
+            currentTime = System.nanoTime(); // Get the current time
 
-            // 2 DRAW
-            repaint();
+            delta += (currentTime - lastTime) / drawInterval; // Calculate the time difference
+            timer += (currentTime - lastTime); // Update the timer
+            lastTime = currentTime; // Update the last time
+
+            if (delta >= 1) { // If enough time has passed
+                // 1 UPDATE
+                update(); // Update game logic
+
+                // 2 DRAW
+                repaint(); // Repaint the screen
+
+                delta--; // Decrease delta
+                drawCount++; // Increment the draw count
+            }
+
+            if (timer >= 1000000000) { // If 1 second has passed
+                System.out.println("FPS: " + drawCount); // Print the FPS
+                drawCount = 0; // Reset the draw count
+                timer = 0; // Reset the timer
+            }
         }
     }
 
     public void update() {
         // Update game logic here
+        if (keyH.upPressed == true) {
+            playerY -= playerSpeed; // Move up
+        }
+        else if (keyH.downPressed == true) {
+            playerY += playerSpeed; // Move down
+        }
+        if (keyH.leftPressed == true) {
+            playerX -= playerSpeed; // Move left
+        }
+        else if (keyH.rightPressed == true) {
+            playerX += playerSpeed; // Move right
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -52,7 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Example: g2.drawRect(0, 0, tileSize, tileSize); // Draw a rectangle
 
         g2.setColor(Color.WHITE);
-        g2.fillRect(100, 100, tileSize, tileSize); // Draw a filled rectangle
+        g2.fillRect(playerX, playerY, tileSize, tileSize); // Draw a filled rectangle
         g2.dispose(); // Dispose of the graphics context
     }
 }
