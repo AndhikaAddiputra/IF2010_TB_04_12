@@ -4,25 +4,30 @@ import javax.swing.*;
 import java.awt.*;
 
 import entity.Player;
+import tile.Tile;
+import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
     //screen settings
-    final int originalTileSize = 32; // 16x16 tile
-    final int scale = 3; // Scale the tile size
+    final int originalTileSize = 16; // 16x16 tile
+    final int scale = 2; // Scale the tile size
     public final int tileSize = originalTileSize * scale; // 48x48 tile
-    final int maxScreenCol = 32; // 16 tiles across
-    final int maxScreenRow = 24; // 12 tiles down
-    final int screenWidth = tileSize * maxScreenCol; // 768 pixels wide
-    final int screenHeight = tileSize * maxScreenRow; // 576 pixels high
+    public final int maxScreenCol = 16; // 16 tiles across
+    public final int maxScreenRow = 16; // 12 tiles down
+    public final int screenWidth = tileSize * maxScreenCol; // 768 pixels wide
+    public final int screenHeight = tileSize * maxScreenRow; // 576 pixels high
 
+    int FPS = 60; // Frames per second
+
+    TileManager tileM = new TileManager(this); // Tile manager for handling tiles
     KeyHandler keyH = new KeyHandler(); // Key handler for input
     Thread gameThread; // Thread for the game loop
 
     Player player = new Player(this, keyH); // Player object
     // set player
-    int playerX = 100; // Player's X position
-    int playerY = 100; // Player's Y position
-    int playerSpeed = 4; // Player's speed
+    // int playerX = 100; // Player's X position
+    // int playerY = 100; // Player's Y position
+    // int playerSpeed = 4; // Player's speed
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -40,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
     @Override
     public void run() {
         // Game loop
-        double drawInterval = 1000000000 / 60; // Draw every 1/60th of a second
+        double drawInterval = 1000000000 / FPS; // Draw every 1/60th of a second
         double delta = 0; // Time difference
         long lastTime = System.nanoTime(); // Get the current time
         long currentTime; // Variable to store the current time
@@ -84,6 +89,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Draw the game elements here
         // Example: g2.drawRect(0, 0, tileSize, tileSize); // Draw a rectangle
+        tileM.draw(g2); // Draw the tiles
         player.draw(g2);
         
         g2.dispose(); // Dispose of the graphics context

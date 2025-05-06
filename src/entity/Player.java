@@ -28,16 +28,16 @@ public class Player extends Entity {
 
     public void getPlayerImage() {
         try {
-            stand = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_stand.png")); // Load the player's standing image
+            stand = ImageIO.read(getClass().getResourceAsStream("/res/image/player_hijab/hijab_stand.png")); // Load the player's standing image
             // Load the player's images for different directions
-            up1 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_up_1.png")); // Load the player's up image
-            up2 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_up_2.png")); // Load the player's up image
-            down1 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_down_1.png")); // Load the player's down image
-            down2 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_down_2.png")); // Load the player's down image
-            left1 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_left_1.png")); // Load the player's left image
-            left2 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_left_2.png")); // Load the player's left image  
-            right1 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_right_1.png")); // Load the player's right image
-            right2 = ImageIO.read(getClass().getResourceAsStream("/image/player_hijab/hijab_right_2.png")); // Load the player's right image
+            up1 = ImageIO.read(getClass().getResourceAsStream("/res/image/player_hijab/hijab_up_1.png")); // Load the player's up image
+            up2 = ImageIO.read(getClass().getResourceAsStream("/res/image/player_hijab/hijab_up_2.png")); // Load the player's up image
+            down1 = ImageIO.read(getClass().getResourceAsStream("/res/image/player_hijab/hijab_down_1.png")); // Load the player's down image
+            down2 = ImageIO.read(getClass().getResourceAsStream("/res/image/player_hijab/hijab_down_2.png")); // Load the player's down image
+            left1 = ImageIO.read(getClass().getResourceAsStream("/res/image/player_hijab/hijab_left_1.png")); // Load the player's left image
+            left2 = ImageIO.read(getClass().getResourceAsStream("/res/image/player_hijab/hijab_left_2.png")); // Load the player's left image  
+            right1 = ImageIO.read(getClass().getResourceAsStream("/res/image/player_hijab/hijab_right_1.png")); // Load the player's right image
+            right2 = ImageIO.read(getClass().getResourceAsStream("/res/image/player_hijab/hijab_right_2.png")); // Load the player's right image
 
         } catch (Exception e) {
             e.printStackTrace(); // Print the stack trace for debugging
