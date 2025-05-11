@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import entity.Player;
-import tile.Tile;
+// import tile.Tile;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -13,9 +13,15 @@ public class GamePanel extends JPanel implements Runnable {
     final int scale = 2; // Scale the tile size
     public final int tileSize = originalTileSize * scale; // 48x48 tile
     public final int maxScreenCol = 16; // 16 tiles across
-    public final int maxScreenRow = 16; // 12 tiles down
+    public final int maxScreenRow = 12; // 12 tiles down
     public final int screenWidth = tileSize * maxScreenCol; // 768 pixels wide
     public final int screenHeight = tileSize * maxScreenRow; // 576 pixels high
+
+    //world settings
+    public final int maxWorldCol = 50; // 50 tiles across
+    public final int maxWorldRow = 50; // 50 tiles down
+    public final int worldWidth = tileSize * maxWorldCol; // 768 pixels wide
+    public final int worldHeight = tileSize * maxWorldRow; // 576 pixels high
 
     int FPS = 60; // Frames per second
 
@@ -23,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH = new KeyHandler(); // Key handler for input
     Thread gameThread; // Thread for the game loop
 
-    Player player = new Player(this, keyH); // Player object
+    public Player player = new Player(this, keyH); // Player object
     // set player
     // int playerX = 100; // Player's X position
     // int playerY = 100; // Player's Y position
