@@ -25,6 +25,8 @@ public class Player extends Entity {
         solidArea = new Rectangle(); // Set the solid area for collision detection
         solidArea.x = 12;
         solidArea.y = 16;
+        solidAreaDefaultX = solidArea.x; // Default X position of the solid area
+        solidAreaDefaultY = solidArea.y; // Default Y position of the solid area
         solidArea.width = 24;
         solidArea.height = 32;
 

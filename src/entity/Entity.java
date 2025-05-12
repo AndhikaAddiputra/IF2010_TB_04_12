@@ -11,5 +11,6 @@ public class Entity {
     public int spriteCounter = 0; // Counter for sprite animation
     public int spriteNum = 1; // Current sprite number
     public Rectangle solidArea; // Rectangle for collision detection
+    public int solidAreaDefaultX, solidAreaDefaultY; // Default position of the solid area
     public boolean collisionOn = false; // Collision flag
 }

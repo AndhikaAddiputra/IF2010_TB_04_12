@@ -12,6 +12,8 @@ public class OBJ_Door extends SuperObject {
         } catch (Exception e) {
             e.printStackTrace(); // Print the stack trace for debugging
         }
+
+        collision = true; // Set collision to true for the door
     }
     
 }

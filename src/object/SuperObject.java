@@ -1,6 +1,8 @@
 package object;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+
 import main.GamePanel;
 
 public class SuperObject {
@@ -8,6 +10,9 @@ public class SuperObject {
     public String name; // Name of the object
     public boolean collision = false; // Collision flag
     public int worldX, worldY; // World coordinates of the object
+    public Rectangle solidArea = new Rectangle(0, 0, 48, 48); // Solid area for collision detection
+    public int solidAreaDefaultX = 0; // Default position of the solid area
+    public int solidAreaDefaultY = 0; // Default position of the solid area
 
     public void draw(Graphics2D g2, GamePanel gp) {
         // Draw the object (to be implemented in subclasses)
