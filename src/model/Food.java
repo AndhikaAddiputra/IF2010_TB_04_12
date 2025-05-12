@@ -12,6 +12,7 @@ public class Food extends Item {
         this.sellPrice = sellPrice;
     }
 
+    @Override
     public Integer getAddEnergy() {
         return addEnergy;
     }

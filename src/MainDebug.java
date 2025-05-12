@@ -7,17 +7,23 @@ public class MainDebug {
     public static void main(String[] args) {
         // Setup dasar permainan
         FarmMap farmMap = new FarmMap();
-        GameState gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, false);
         Player player = new Player("Tester", 'M',"MyFarm");
-        player.setPosition(new java.awt.Point(10, 10));
+        player.setPosition(new java.awt.Point(10, 10)); // Respawn di sisi rumah
 
         // Tambahkan beberapa item ke inventory
-        player.getInventory().addItem(new Item("Hoe", false));
-        player.getInventory().addItem(new Item("Watering Can", false));
+        player.getInventory().addItem(EquipmentRegistry.getEquipment("Hoe"), 1);
+        player.getInventory().addItem(EquipmentRegistry.getEquipment("Watering Can"), 1);
+        player.getInventory().addItem(EquipmentRegistry.getEquipment("Pickaxe"), 1);
         player.getInventory().addItem(SeedsRegistry.getSeeds("Wheat Seeds"), 5);
+        player.getInventory().addItem(FoodRegistry.getFood("Baguette"), 5);
+        player.getInventory().addItem(FishRegistry.getFish("Salmon"), 1);
+        player.getInventory().addItem(MiscRegistry.getMisc("Firewood"), 3);
 
         // Buat controller
-        FarmActionController farmController = new FarmActionController(player, farmMap, gameState);
+        FarmActionController farmController = new FarmActionController(player, farmMap, null);
+        GameState gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false);
+        farmController.setGameState(gameState);
+        gameState.setAutoSleepHandler(() -> farmController.sleep()); // handler autosleep nya
 
         // Interface input CLI
         Scanner scanner = new Scanner(System.in);
@@ -33,9 +39,12 @@ public class MainDebug {
                     System.out.println("Commands:");
                     System.out.println("move up/down/left/right");
                     System.out.println("till");
+                    System.out.println("recover land");
                     System.out.println("plant [seed name]");
                     System.out.println("water");
                     System.out.println("harvest");
+                    System.out.println("eat [item name]");
+                    System.out.println("sleep");
                     System.out.println("inventory");
                     System.out.println("pos");
                     System.out.println("map");
@@ -47,8 +56,10 @@ public class MainDebug {
                 case "pos" -> System.out.println("Player Position: " + player.getPosition());
                 case "inventory" -> player.getInventory().displayInventory();
                 case "till" -> farmController.till();
+                case "recover land" -> farmController.recoverLand();
                 case "water" -> farmController.water();
                 case "harvest" -> farmController.harvest();
+                case "sleep" -> farmController.sleep();
                 case "status" -> farmController.debugShowPlayerStatus();
                 case "tile" -> farmController.debugShowTileInfo();
                 case "map" -> printFarmMap(farmMap, player);
@@ -65,6 +76,9 @@ public class MainDebug {
                     } else if (input.startsWith("plant ")) {
                         String seedName = input.substring(6);
                         farmController.plant(seedName);
+                    } else if (input.startsWith("eat ")) {
+                        String itemName = input.substring(4);
+                        farmController.eat(itemName);
                     } else {
                         System.out.println("Unknown command.");
                     }

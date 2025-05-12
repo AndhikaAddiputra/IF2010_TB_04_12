@@ -12,7 +12,7 @@ public class MiscRegistry {
         miscMap.put("Proposal Ring", new MiscItem("Proposal Ring", "Proposal Ring bisa digunakan untuk melamar dan menikahi NPC"));
     }
 
-    public static MiscItem get(String name) {
+    public static MiscItem getMisc(String name) {
         return miscMap.get(name);
     }
 

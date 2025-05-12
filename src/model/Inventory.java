@@ -42,6 +42,10 @@ public class Inventory {
         return true;
     }
 
+    public Item getItem(String itemName) {
+        return items.containsKey(itemName) ? items.get(itemName).getItem() : null;
+    }
+
     public int getItemQuantity(String itemName) {
         return items.containsKey(itemName) ? items.get(itemName).getQuantity() : 0;
     }

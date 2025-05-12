@@ -6,14 +6,26 @@ import utility.*;
 import java.awt.Point;
 
 public class FarmActionController {
-    private final Player player;
+    private Player player;
     private final FarmMap farmMap;
-    private final GameState gameState;
+    private GameState gameState;
 
     public FarmActionController(Player player, FarmMap farmMap, GameState gameState) {
         this.player = player;
         this.farmMap = farmMap;
         this.gameState = gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    private boolean canPerformAction(int energyCost) {
+        if (player.getEnergy() - energyCost < -20) {
+            System.out.println("You are too exhausted to perform this action.");
+            return false;
+        }
+        return true;
     }
 
     public boolean move(Direction direction) {
@@ -49,9 +61,11 @@ public class FarmActionController {
             System.out.println("You need a Hoe to till land.");
             return;
         }
+        if (canPerformAction(5)){
+            player.reduceEnergy(5);
+            gameState.advanceTime(5);
+        }
         tile.setType(TileType.TILLED);
-        player.reduceEnergy(5);
-        gameState.advanceTime(5);
         System.out.println("You tilled the land.");
     }
 
@@ -70,11 +84,13 @@ public class FarmActionController {
             System.out.println("Invalid seed.");
             return;
         }
+        if (canPerformAction(5)){
+            player.reduceEnergy(5);
+            gameState.advanceTime(5);
+        }
         tile.setType(TileType.PLANTED);
         tile.setSeed(seed);
         player.getInventory().removeItem(seedName, 1);
-        player.reduceEnergy(5);
-        gameState.advanceTime(5);
         System.out.println("You planted: " + seedName);
     }
 
@@ -88,9 +104,11 @@ public class FarmActionController {
             System.out.println("You need a Watering Can to water.");
             return;
         }
+        if (canPerformAction(5)){
+            player.reduceEnergy(5);
+            gameState.advanceTime(5);
+        }
         tile.startGrowth();
-        player.reduceEnergy(5);
-        gameState.advanceTime(5);
         System.out.println("You watered the crop.");
     }
 
@@ -110,11 +128,77 @@ public class FarmActionController {
         for (int i = 0; i < units; i++) {
             player.getInventory().addItem(crop);
         }
+        if (canPerformAction(5 * units)){
+            player.reduceEnergy(5 * units);
+            gameState.advanceTime(5 * units);
+        }
         tile.setType(TileType.TILLABLE);
         tile.clearSeed();
-        player.reduceEnergy(5 * units);
-        gameState.advanceTime(5 * units);
         System.out.println("You harvested: " + units + " unit(s) of " + crop.getItemName());
+    }
+
+    public void recoverLand(){
+        Tile tile = farmMap.getTileAt(player.getPosition());
+        if (tile.getType() != TileType.TILLED) {
+            System.out.println("You must stand on tilled land (t) to recover.");
+            return;
+        }
+        if (canPerformAction(5)){
+            player.reduceEnergy(5);
+            gameState.advanceTime(5);
+        }
+        tile.setType(TileType.TILLABLE);
+        System.out.println("You recovered the land.");
+    }
+
+    public void eat(String itemName) {
+        Item item = player.getInventory().getItem(itemName);
+        if (item == null || !item.isEdible()) {
+            System.out.println("This item is not edible or not found.");
+            return;
+        }
+        int restore = item.getAddEnergy();
+        player.addEnergy(restore);
+        player.getInventory().removeItem(itemName, 1);
+        gameState.advanceTime(5);
+        System.out.println("You ate " + itemName + " and restored " + restore + " energy.");
+        System.out.println("Current energy: " + player.getEnergy());
+    }
+
+    public void sleep(){
+        int currentEnergy = player.getEnergy();
+        boolean isNearHouse = isNearHouse(player.getPosition());
+
+        if (!isNearHouse) {
+            player.setEnergy(10);
+            System.out.println("You collapsed outside. Energy only recovered to 10.");
+        } else {
+            if (currentEnergy >= 10) {
+                player.setEnergy(100);
+                System.out.println("You slept well in the house. Energy fully restored.");
+            } else {
+                player.setEnergy(50);
+                System.out.println("You slept poorly due to low energy. Energy set to 50.");
+            }
+        }
+        gameState.setTime(new Time(6, 0));
+    }
+
+    //handler sleep tambahan
+    public boolean isNearHouse(Point pos) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0) continue;
+                Point neighbor = new Point(pos.x + dx, pos.y + dy);
+                if (farmMap.isValidPosition(neighbor)) {
+                    Tile tile = farmMap.getTileAt(neighbor);
+                    if (tile.getType() == TileType.HOUSE) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     // Debug method

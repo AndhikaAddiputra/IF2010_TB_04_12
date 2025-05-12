@@ -11,6 +11,7 @@ public class Fish extends Item{
     private Set<Location> location;
     private String type;
     private Integer price;
+    private final Integer addEnergy = 1;
 
     public Fish(String itemName, Set<Season> season, Set<Range<Time>> availableTime, Set<Weather> weather, Set<Location> location, String type, Integer price) {
         super(itemName, true);
@@ -55,6 +56,11 @@ public class Fish extends Item{
     public void setPrice(Integer price) {
         this.price = price;
     }
+    @Override
+    public Integer getAddEnergy() {
+        return addEnergy;
+    }
+
     @Override
     public void useItem() {
         System.out.println("Using fish: " + itemName);

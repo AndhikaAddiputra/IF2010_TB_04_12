@@ -27,9 +27,13 @@ public class Item {
     public void useItem() {
         System.out.println("Using item: " + itemName);
     }
-    
+
     public void displayItem() {
         System.out.println("Item: " + itemName);
         System.out.println("Edible: " + (edible ? "Yes" : "No"));
+    }
+
+    public Integer getAddEnergy() {
+        return 0;
     }
 }

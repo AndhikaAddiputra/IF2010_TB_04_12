@@ -5,6 +5,7 @@ public class Crop extends Item{
     private Integer sellPrice;
     private Integer unitPerHarvest;
     private String sourceSeedName;
+    private final Integer addEnergy = 3;
 
     public Crop(String itemName, Integer buyPrice, Integer sellPrice, Integer unitPerHarvest, String sourceSeedName) {
         super(itemName, true);
@@ -44,6 +45,11 @@ public class Crop extends Item{
 
     public void setSourceSeedName(String sourceSeedName) {
         this.sourceSeedName = sourceSeedName;
+    }
+
+    @Override
+    public Integer getAddEnergy() {
+        return addEnergy;
     }
 
     @Override
