@@ -1,17 +1,16 @@
 package object;
 
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import entity.Entity;
+import main.GamePanel;
 
-public class OBJ_Key extends SuperObject {
-    public OBJ_Key() {
-        // Constructor for the OBJ_Key class
-        // Initialize the key object with default values
-        name = "Key"; // Set the name of the key
-        try {
-            image = ImageIO.read(getClass().getResourceAsStream("/res/image/object/key.png")); // Load the key image
-        } catch (Exception e) {
-            e.printStackTrace(); // Print the stack trace for debugging
-        }
+public class OBJ_Key extends Entity {
+
+    public OBJ_Key(GamePanel gp) {
+        super(gp);
+
+        name = "Key";
+        down1 = setup("/res/image/objects/key", gp.tileSize, gp.tileSize);
+        description = "[" + name + "]\nIt opens a door.";
+        price = 100;
     }
 }

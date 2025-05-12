@@ -1,23 +1,33 @@
 package main;
 
-import javax.swing.*;
-// import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 public class Main {
-    public static void main(String[] args) {
-        JFrame window = new JFrame();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(true);
-        window.setTitle("Spakbor Hills");
+    // MAIN METHOD
 
+    public static JFrame window;
+
+    public static void main(String[] args) {
+        window = new JFrame();
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Close (X) button
+        window.setResizable(false); // User unable to resize the window
+        window.setTitle("2D Adventure"); // Title of the Apps
+
+        // Call GamePanel
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
-        window.pack(); // Adjusts the window size to fit the game panel
 
-        window.setLocationRelativeTo(null); // Centers the window on the screen
+        gamePanel.config.loadConfig();
+        if (gamePanel.fullScreenOn == true) {
+            window.setUndecorated(true);
+        }
+
+        window.pack();
+        window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        gamePanel.setupGame(); // Set up the game (load assets, initialize objects, etc.)
-        gamePanel.startGameThread(); // Start the game loop
+        gamePanel.setupGame();
+        gamePanel.startGameThread();
     }
 }
