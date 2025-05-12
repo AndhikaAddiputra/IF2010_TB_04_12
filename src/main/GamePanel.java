@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import entity.Player;
+import object.SuperObject;
 // import tile.Tile;
 import tile.TileManager;
 
@@ -29,12 +30,9 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH = new KeyHandler(); // Key handler for input
     Thread gameThread; // Thread for the game loop
     public CollisionChecker cChecker = new CollisionChecker(this); // Collision checker for handling collisions
-
+    public AssetSetter aSetter = new AssetSetter(this); // Asset setter for initializing game objects
     public Player player = new Player(this, keyH); // Player object
-    // set player
-    // int playerX = 100; // Player's X position
-    // int playerY = 100; // Player's Y position
-    // int playerSpeed = 4; // Player's speed
+    public SuperObject obj[] = new SuperObject[10]; // Array of game objects
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -42,6 +40,11 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true); // Enable double buffering for smoother graphics}
         this.addKeyListener(keyH); // Add key listener for input
         this.setFocusable(true); // Make the panel focusable to receive key events
+    }
+
+    public void setupGame() {
+        aSetter.setObject(); // Set up game objects
+        // aSetter.setNPC(); // Set up NPCs (if any)
     }
 
     public void startGameThread() {
@@ -95,8 +98,14 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g; // Cast to Graphics2D for better rendering
 
         // Draw the game elements here
-        // Example: g2.drawRect(0, 0, tileSize, tileSize); // Draw a rectangle
         tileM.draw(g2); // Draw the tiles
+
+        for (int i = 0; i < obj.length; i++) {
+            if (obj[i] != null) {
+                obj[i].draw(g2, this); // Draw the objects
+            }
+        }
+
         player.draw(g2);
         
         g2.dispose(); // Dispose of the graphics context
