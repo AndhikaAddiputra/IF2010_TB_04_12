@@ -22,6 +22,12 @@ public class Player extends Entity {
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2); // Calculate the screen X position
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2); // Calculate the screen Y position
 
+        solidArea = new Rectangle(); // Set the solid area for collision detection
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidArea.width = 32; // Set the width of the solid area
+        solidArea.height = 32; // Set the height of the solid area
+
         setDefaultValues();
         getPlayerImage();
     }
@@ -55,21 +61,37 @@ public class Player extends Entity {
         if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true) {
             if (keyH.upPressed == true) {
                 direction = "up"; // Set the direction to up
-                worldY -= speed; // Move up
             }
             else if (keyH.downPressed == true) {
                 direction = "down"; // Set the direction to down
-                worldY += speed; // Move down
             }
             if (keyH.leftPressed == true) {
                 direction = "left"; // Set the direction to left
-                worldX -= speed; // Move left
             }
             else if (keyH.rightPressed == true) {
                 direction = "right"; // Set the direction to right
-                worldX += speed; // Move right
             }
-    
+
+            collisionOn = false; // Reset the collision flag
+            gp.cChecker.checkTile(this); // Check for collisions with tiles
+
+            if (collisionOn == false) { // If no collision
+                switch (direction) {
+                    case "up":
+                        worldY -= speed; // Move up
+                        break;
+                    case "down":
+                        worldY += speed; // Move down
+                        break;
+                    case "left":
+                        worldX -= speed; // Move left
+                        break;
+                    case "right":
+                        worldX += speed; // Move right
+                        break;
+                }
+            }
+
             spriteCounter++; // Increment the sprite counter
             if (spriteCounter > 12) { // change every ... frames
                 if (spriteNum == 1) {
