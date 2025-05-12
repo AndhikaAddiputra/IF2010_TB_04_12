@@ -23,10 +23,10 @@ public class Player extends Entity {
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2); // Calculate the screen Y position
 
         solidArea = new Rectangle(); // Set the solid area for collision detection
-        solidArea.x = 8;
+        solidArea.x = 12;
         solidArea.y = 16;
-        solidArea.width = 32; // Set the width of the solid area
-        solidArea.height = 32; // Set the height of the solid area
+        solidArea.width = 24;
+        solidArea.height = 30;
 
         setDefaultValues();
         getPlayerImage();

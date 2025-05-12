@@ -19,3 +19,5 @@ The `JAVA PROJECTS` view allows you to manage your dependencies. More details ca
 
 this is our reference for the project: https://youtu.be/VpH33Uw-_0E?si=lpDlaoakMB276uwA
 we make our pixel character with aseprite.
+
+ini buat notes aja, collision masih belum beres

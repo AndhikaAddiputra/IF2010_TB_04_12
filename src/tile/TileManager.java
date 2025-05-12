@@ -28,18 +28,18 @@ public class TileManager {
 
             tile[1] = new Tile(); // Create a new tile object
             tile[1].image = ImageIO.read(getClass().getResourceAsStream("/res/image/tile/wall.png")); // Set the tile image
-            tile[1].collision = true; // Set collision for the tile
+            // tile[1].collision = true; // Set collision for the tile
 
             tile[2] = new Tile(); // Create a new tile object
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/res/image/tile/water00.png")); // Set the tile image
-            tile[2].collision = true; // Set collision for the tile
+            // tile[2].collision = true; // Set collision for the tile
 
             tile[3] = new Tile(); // Create a new tile object
             tile[3].image = ImageIO.read(getClass().getResourceAsStream("/res/image/tile/earth.png")); // Set the tile image
 
             tile[4] = new Tile(); // Create a new tile object
             tile[4].image = ImageIO.read(getClass().getResourceAsStream("/res/image/tile/tree.png")); // Set the tile image
-            tile[4].collision = true; // Set collision for the tile
+            // tile[4].collision = true; // Set collision for the tile
 
             tile[5] = new Tile(); // Create a new tile object
             tile[5].image = ImageIO.read(getClass().getResourceAsStream("/res/image/tile/floor01.png")); // Set the tile image
