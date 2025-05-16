@@ -11,7 +11,7 @@ public class NPCBuilding implements Location{
 
     @Override
     public void visit(Player player){
-
+        System.out.println("You visit " + npc.getName() + " at home.");
     }
 
     @Override
