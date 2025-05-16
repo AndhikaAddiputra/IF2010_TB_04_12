@@ -1,12 +1,12 @@
 package model;
 
 public class Store implements Location{
-    String name;
-    NPC npc;
+    private String name = "Store";
+    private NPC npc;
 
     public Store(String name, NPC npc){
         this.name = name;
-        this.npc = npc;
+        this.npc = NPCRegistry.get(npcName);
     }
 
     @Override
