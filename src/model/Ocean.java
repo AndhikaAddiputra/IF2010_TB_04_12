@@ -1,8 +1,8 @@
 package model;
 
 public class Ocean implements FishingSpot,Location{
-    String name;
-    NPC npc;
+    private String name = "ocean";
+    public NPC npc;
 
     public Ocean(String name,NPC npc){
         this.name = name;
@@ -16,7 +16,7 @@ public class Ocean implements FishingSpot,Location{
     
     @Override
     public String getName(){
-        this.name = name;
+        return name = name;
     }
 
     @Override
