@@ -1,3 +1,5 @@
+package model;
+
 public class Store implements Location{
     String name;
     NPC npc;
