@@ -2,7 +2,7 @@ package model;
 
 public class ForestRiver implements FishingSpot,Location {
     private String name = "Forest River";
-    NPC npc;
+    public NPC npc;
 
     public ForestRiver(String name,NPC npc){
         this.name = name;
