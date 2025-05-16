@@ -1,3 +1,5 @@
+package model;
+
 public class ForestRiver implements FishingSpot,Location {
     String name;
     NPC npc;
