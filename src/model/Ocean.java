@@ -1,3 +1,5 @@
+package model;
+
 public class Ocean implements FishingSpot,Location{
     String name;
     NPC npc;
