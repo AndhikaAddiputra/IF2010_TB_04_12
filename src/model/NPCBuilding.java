@@ -1,3 +1,5 @@
+package model;
+
 public class NPCBuilding implements Location{
     String name;
     NPC npc;
