@@ -2,11 +2,11 @@ package model;
 
 public class Ocean implements FishingSpot,Location{
     private String name = "ocean";
-    public NPC npc;
+    private NPC npc;
 
     public Ocean(String name,NPC npc){
         this.name = name;
-        this.npc = npc;
+        this.npc = NPCRegistry.get(npcName);
     }
 
     @Override
