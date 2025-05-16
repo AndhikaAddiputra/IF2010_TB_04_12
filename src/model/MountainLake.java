@@ -4,6 +4,11 @@ public class MountainLake implements FishingSpot,Location {
     private String name = "Mountain Lake";
     public NPC npc;
 
+    public MountainLake(String name,NPC npc){
+        this.name = name;
+        this.npc = npc;
+    }
+    
     @Override
     public void visit(Player player){
         System.out.println("Visiting " + name);
@@ -11,7 +16,7 @@ public class MountainLake implements FishingSpot,Location {
     
     @Override
     public String getName(){
-        this.name = name;
+        return name = name;
     }
 
     @Override
