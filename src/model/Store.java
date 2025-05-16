@@ -1,7 +1,7 @@
 package model;
 
 public class Store implements Location{
-    private String name = "Store";
+    private String name;
     private NPC npc;
 
     public Store(String name, NPC npc){
@@ -11,7 +11,7 @@ public class Store implements Location{
 
     @Override
     public void visit(Player player){
-
+        System.out.println(player.getName() + " is visiting " + name);
     }
     
     @Override
