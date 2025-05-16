@@ -11,12 +11,12 @@ public class Ocean implements FishingSpot,Location{
 
     @Override
     public void visit(Player player){
-
+        System.out.println("Visiting " + name);
     }
     
     @Override
     public String getName(){
-        return name = name;
+        return this.name;
     }
 
     @Override
