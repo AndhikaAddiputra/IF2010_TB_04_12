@@ -16,6 +16,6 @@ public class Store implements Location{
     
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 }
