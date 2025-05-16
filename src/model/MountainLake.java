@@ -16,7 +16,7 @@ public class MountainLake implements FishingSpot,Location {
     
     @Override
     public String getName(){
-        return name = name;
+        return this.name;
     }
 
     @Override
