@@ -1,17 +1,12 @@
 package model;
 
 public class MountainLake implements FishingSpot,Location {
-    String name;
-    NPC npc;
-
-    public MountainLake(String name,NPC npc){
-        this.name = name;
-        this.npc = npc;
-    }
+    private String name = "Mountain Lake";
+    public NPC npc;
 
     @Override
     public void visit(Player player){
-
+        System.out.println("Visiting " + name);
     }
     
     @Override
