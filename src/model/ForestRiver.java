@@ -6,21 +6,21 @@ public class ForestRiver implements FishingSpot,Location {
 
     public ForestRiver(String name,NPC npc){
         this.name = name;
-        this.npc = npc;
+        this.npc = NPCRegistry.get(npcName);
     }
 
     @Override
     public void visit(Player player){
-
+        System.out.println("Visiting " + name);
     }
     
     @Override
     public String getName(){
-        return name = name;
+        return this.name;
     }
 
     @Override
     public void fishing(Player player){
-        System.out.println("Visiting " + name);
+        
     }
 }
