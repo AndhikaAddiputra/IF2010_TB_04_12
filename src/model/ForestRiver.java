@@ -1,7 +1,7 @@
 package model;
 
 public class ForestRiver implements FishingSpot,Location {
-    String name;
+    private String name = "Forest River";
     NPC npc;
 
     public ForestRiver(String name,NPC npc){
@@ -16,11 +16,11 @@ public class ForestRiver implements FishingSpot,Location {
     
     @Override
     public String getName(){
-        this.name = name;
+        return name = name;
     }
 
     @Override
     public void fishing(Player player){
-        
+        System.out.println("Visiting " + name);
     }
 }
