@@ -1,3 +1,5 @@
+package model;
+
 public class MountainLake implements FishingSpot,Location {
     String name;
     NPC npc;
