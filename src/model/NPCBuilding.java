@@ -1,12 +1,12 @@
 package model;
 
 public class NPCBuilding implements Location{
-    String name;
-    NPC npc;
+    private String name;
+    private NPC npc;
 
     public NPCBuilding(String name, NPC npc){
-        this.name = name;
-        this.npc = npc;
+        this.name = npcName + "'s House";
+        this.npc = NPCRegistry.get(npcName);;
     }
 
     @Override
