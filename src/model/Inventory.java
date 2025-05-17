@@ -1,8 +1,11 @@
 package model;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Inventory {
     private Map<String, InventoryEntry> items;
@@ -54,8 +57,30 @@ public class Inventory {
         return items.containsKey(itemName);
     }
 
+    public boolean hasItem(String itemName, int quantity) {
+        InventoryEntry entry = items.get(itemName);
+        int itemQuantity = entry.getQuantity();
+        return items.containsKey(itemName) && itemQuantity >= quantity;
+    }
+
     public Set<String> getAllItemNames() {
         return items.keySet();
+    }
+
+    public Set<Item> getAllItems() {
+    return items.values().stream()
+                .map(InventoryEntry::getItem)
+                .collect(Collectors.toSet());
+    }
+
+    public List<Item> getAllItemsAsList() {
+    return items.values().stream()
+                .map(InventoryEntry::getItem)
+                .toList(); 
+    }
+
+    public Collection<InventoryEntry> getEntries() {
+    return items.values();
     }
 
     public Map<String, InventoryEntry> getItems() {

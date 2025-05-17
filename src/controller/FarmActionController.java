@@ -165,14 +165,39 @@ public class FarmActionController {
         System.out.println("Current energy: " + player.getEnergy());
     }
 
+    public void enterHouse() {
+        Point pos = player.getPosition();
+        boolean nearHouse = isNearHouse(pos);
+        if (!nearHouse) {
+            System.out.println("You must be next to the house to enter.");
+            return;
+        }
+        player.setInsideHouse(true);
+        System.out.println("🏠 You entered the house.");
+    }
+
+    public void exitHouse() {
+        player.setInsideHouse(false);
+        System.out.println("🚪 You exited the house.");
+    }
+
+    public void watchWeather() {
+        if (!player.isInsideHouse()) {
+            System.out.println("📺 You need to be inside the house to check the weather.");
+            return;
+        }
+        System.out.println("☁️ Today’s weather is: " + gameState.getWeather());
+    }
+    
+
     public void sleep(){
         int currentEnergy = player.getEnergy();
-        boolean isNearHouse = isNearHouse(player.getPosition());
 
-        if (!isNearHouse) {
-            player.setEnergy(10);
-            System.out.println("You collapsed outside. Energy only recovered to 10.");
-        } else {
+        if (!player.isInsideHouse()) {
+            System.out.println("You must be inside the house to do this.");
+            return;
+        }
+        else {
             if (currentEnergy >= 10) {
                 player.setEnergy(100);
                 System.out.println("You slept well in the house. Energy fully restored.");
@@ -182,9 +207,11 @@ public class FarmActionController {
             }
         }
         gameState.setTime(new Time(6, 0));
+        gameState.advanceDay();
     }
 
-    //handler sleep tambahan
+
+    // handler sleep dan cooking tambahan
     public boolean isNearHouse(Point pos) {
         for (int dx = -1; dx <= 1; dx++) {
             for (int dy = -1; dy <= 1; dy++) {
@@ -201,11 +228,47 @@ public class FarmActionController {
         return false;
     }
 
+    // handler shopping tambahan
+    public boolean isNearShippingBin(Point pos){
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0) continue;
+                Point neighbor = new Point(pos.x + dx, pos.y + dy);
+                if (farmMap.isValidPosition(neighbor)) {
+                    Tile tile = farmMap.getTileAt(neighbor);
+                    if (tile.getType() == TileType.SHIPPING_BIN) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // handler fishing tambahan
+    public boolean isNearPond(Point pos){
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0) continue;
+                Point neighbor = new Point(pos.x + dx, pos.y + dy);
+                if (farmMap.isValidPosition(neighbor)) {
+                    Tile tile = farmMap.getTileAt(neighbor);
+                    if (tile.getType() == TileType.POND) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     // Debug method
     public void debugShowPlayerStatus() {
         System.out.println("📍 Player Position: " + player.getPosition());
         System.out.println("⚡ Energy: " + player.getEnergy());
         System.out.println("🕒 Time: " + gameState.getTime());
+        System.out.println("Weather : " + gameState.getWeather());
+        System.out.println("Season : " + gameState.getSeason());
     }
 
     public void debugShowTileInfo() {

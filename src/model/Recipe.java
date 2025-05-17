@@ -1,36 +1,28 @@
 package model;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
-public class Recipe {
+public class Recipe extends Item {
     private String recipeName;
-    private HashMap<String, Integer> ingredients;
+    private HashMap<IngredientRequirement, Integer> ingredients;
     private boolean unlockCondition;
+    private Food food;
 
-    public Recipe(String recipeName, boolean unlockCondition) {
+    public Recipe(String recipeName, boolean unlockCondition, Food food) {
+        super(recipeName, false); // Memanggil konstruktor Item
         this.recipeName = recipeName;
-        this.ingredients = new HashMap<String, Integer>();
+        this.ingredients = new HashMap<>();
         this.unlockCondition = unlockCondition;
-    }
-
-    public Recipe() {
+        this.food = food;
     }
 
     public String getRecipeName() {
         return recipeName;
     }
 
-    public void setRecipeName(String recipeName) {
-        this.recipeName = recipeName;
-    }
-
-    public Map<String, Integer> getIngredients() {
+    public Map<IngredientRequirement, Integer> getIngredients() {
         return ingredients;
-    }
-
-    public void setIngredients(HashMap<String, Integer> ingredients) {
-        this.ingredients = ingredients;
     }
 
     public boolean getUnlockCondition() {
@@ -41,26 +33,26 @@ public class Recipe {
         this.unlockCondition = unlockCondition;
     }
 
-    public void addIngredient(String itemName, int quantity) {
-        if (ingredients.containsKey(itemName)) {
-            ingredients.put(itemName, ingredients.get(itemName) + quantity);
-        } else {
-            ingredients.put(itemName, quantity);
-        }
+    public void addIngredient(IngredientRequirement requirement, int quantity) {
+        ingredients.put(requirement, ingredients.getOrDefault(requirement, 0) + quantity);
     }
-    public void removeIngredient(String itemName, Integer quantity) {
-        if (ingredients.containsKey(itemName)) {
-            int currentQuantity = ingredients.get(itemName);
+
+    public void removeIngredient(IngredientRequirement requirement, int quantity) {
+        if (ingredients.containsKey(requirement)) {
+            int currentQuantity = ingredients.get(requirement);
             if (currentQuantity > quantity) {
-                ingredients.put(itemName, currentQuantity - quantity);
+                ingredients.put(requirement, currentQuantity - quantity);
             } else {
-                ingredients.remove(itemName);
+                ingredients.remove(requirement);
             }
         }
     }
-    public boolean hasIngredient(String itemName) {
-        return ingredients.containsKey(itemName);
+
+    public boolean hasIngredient(IngredientRequirement requirement) {
+        return ingredients.containsKey(requirement);
     }
 
-
-}
+    public Food getFood() {
+        return food;
+    }
+}  

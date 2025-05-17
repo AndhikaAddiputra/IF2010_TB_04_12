@@ -1,13 +1,16 @@
 package model;
 
+import java.util.List;
+
 public class Player extends Character {
     private Integer energy;
     private char gender;
     private Integer gold;
     private Inventory inventory;
-    private NPC partner;
+    private List<NPC> partner;
     private String farmName;
     private Item[] favoriteItems;
+    private boolean isInsideHouse;
 
     public Player(String name, char gender, String farmName) {
         super(name);
@@ -18,6 +21,7 @@ public class Player extends Character {
         this.partner = null; // No partner initially
         this.farmName = farmName;
         this.favoriteItems = new Item[100]; 
+        this.isInsideHouse = false; // Spawn di farmMap
     }
 
     public int getEnergy() {
@@ -44,11 +48,15 @@ public class Player extends Character {
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
-    public NPC getPartner() {
+    public List<NPC> getPartner() {
         return partner;
     }
-    public void setPartner(NPC partner) {
-        this.partner = partner;
+    public void addPartner(NPC partner) {
+        if (this.partner == null) {
+            this.partner = List.of(partner);
+        } else {
+            this.partner.add(partner);
+        }
     }
     public String getFarmName() {
         return farmName;
@@ -67,6 +75,12 @@ public class Player extends Character {
     }
     public void reduceEnergy(int amount) {
         this.energy -= amount;
+    }
+    public boolean isInsideHouse() {
+        return isInsideHouse;
+    }
+    public void setInsideHouse(boolean insideHouse) {
+        isInsideHouse = insideHouse;
     }
 
 }

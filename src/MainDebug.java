@@ -1,4 +1,4 @@
-import controller.FarmActionController;
+import controller.*;
 import java.util.Scanner;
 import model.*;
 import utility.*;
@@ -8,22 +8,29 @@ public class MainDebug {
         // Setup dasar permainan
         FarmMap farmMap = new FarmMap();
         Player player = new Player("Tester", 'M',"MyFarm");
-        player.setPosition(new java.awt.Point(10, 10)); // Respawn di sisi rumah
+        player.setPosition(new java.awt.Point(11, 10)); // Respawn di sisi rumah
 
         // Tambahkan beberapa item ke inventory
         player.getInventory().addItem(EquipmentRegistry.getEquipment("Hoe"), 1);
         player.getInventory().addItem(EquipmentRegistry.getEquipment("Watering Can"), 1);
         player.getInventory().addItem(EquipmentRegistry.getEquipment("Pickaxe"), 1);
-        player.getInventory().addItem(SeedsRegistry.getSeeds("Wheat Seeds"), 5);
+        player.getInventory().addItem(SeedsRegistry.getSeeds("Pumpkin Seeds"), 5);
         player.getInventory().addItem(FoodRegistry.getFood("Baguette"), 5);
         player.getInventory().addItem(FishRegistry.getFish("Salmon"), 1);
         player.getInventory().addItem(MiscRegistry.getMisc("Firewood"), 3);
+        player.getInventory().addItem(RecipeRegistry.getRecipe("Pumpkin Pie Recipe"), 1);
+        player.getInventory().addItem(MiscRegistry.getMisc("Egg"), 1);
+        player.getInventory().addItem(MiscRegistry.getMisc("Coal"), 2);
+        player.getInventory().addItem(CropRegistry.getCrop("Wheat"), 1);
+        player.getInventory().addItem(CropRegistry.getCrop("Pumpkin"), 1);
 
         // Buat controller
         FarmActionController farmController = new FarmActionController(player, farmMap, null);
         GameState gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false);
         farmController.setGameState(gameState);
         gameState.setAutoSleepHandler(() -> farmController.sleep()); // handler autosleep nya
+        CookingController cookingController = new CookingController(player, gameState, farmMap);
+        FishingController fishingController = new FishingController();
 
         // Interface input CLI
         Scanner scanner = new Scanner(System.in);
@@ -53,6 +60,14 @@ public class MainDebug {
                     System.out.println("time");
                     System.out.println("exit");
                 }
+                case "cook" -> {
+                    System.out.print("Enter recipe name: ");
+                    String recipeName = scanner.nextLine();
+                    System.out.print("Enter fuel item (Firewood/Coal): ");
+                    String fuelName = scanner.nextLine();
+                    cookingController.cook(recipeName, fuelName);
+                }
+                
                 case "pos" -> System.out.println("Player Position: " + player.getPosition());
                 case "inventory" -> player.getInventory().displayInventory();
                 case "till" -> farmController.till();
@@ -63,8 +78,26 @@ public class MainDebug {
                 case "status" -> farmController.debugShowPlayerStatus();
                 case "tile" -> farmController.debugShowTileInfo();
                 case "map" -> printFarmMap(farmMap, player);
+                case "enter house" -> farmController.enterHouse();
+                case "exit house" -> farmController.exitHouse();
                 case "time" -> System.out.println("⏱️ Current Time: " + gameState.getTime());
                 case "exit" -> System.exit(0);
+                case "watch" -> farmController.watchWeather();
+                case "fishing" -> {
+                    if (!farmMap.isNearPond(player.getPosition())) {
+                        System.out.println("❌ You must be near the pond to fish here.");
+                    } else {
+                        fishingController.fish(player, gameState);
+                    }
+                }
+                case "set time" -> {
+                    System.out.print("Debug command");
+                    System.out.print("Enter new time (hour): ");
+                    Integer hourInput = scanner.nextInt();
+                    System.out.print("Enter new time (minute): ");
+                    Integer minuteInput = scanner.nextInt();
+                    gameState.setTime(new Time(hourInput, minuteInput));
+                }
                 default -> {
                     if (input.startsWith("move ")) {
                         String dir = input.substring(5).toUpperCase();
@@ -86,7 +119,11 @@ public class MainDebug {
             }
 
             // Setelah aksi, tampilkan peta dan status
-            printFarmMap(farmMap, player);
+            if (!player.isInsideHouse()) {
+                printFarmMap(farmMap, player);
+            } else {
+                System.out.println("🏠 You are currently inside the house.");
+            }
             farmController.debugShowPlayerStatus();
         }
     }

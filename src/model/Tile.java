@@ -57,6 +57,10 @@ public class Tile {
         return remainingHarvestMinutes;
     }
 
+    public void setRemainingHarvestMinutes(int remainingHarvestMinutes) {
+        this.remainingHarvestMinutes = remainingHarvestMinutes;
+    }
+
     public void clearSeed() {
         this.seed = null;
         this.remainingHarvestMinutes = -1;

@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.Point;
+import utility.Season;
 import utility.TileType;
 
 public class FarmMap {
@@ -87,5 +88,52 @@ public class FarmMap {
             }
         }
     }
+
+    public void killOutOfSeasonCrops(Season season){
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                Tile tile = grid[y][x];
+                if (tile.getType() == TileType.PLANTED) {
+                    if (!tile.getSeed().getSeason().contains(season)) {
+                        tile.setSeed(null);
+                        tile.setRemainingHarvestMinutes(-1);
+                        tile.setType(TileType.TILLABLE);
+                        System.out.println("🌿 Crop at (" + x + "," + y + ") died due to season change.");
+                    }
+                }
+            }
+        }
+    }
+
+    public void waterAllTillableTiles(){
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                Tile tile = grid[y][x];
+                if (tile.getType() == TileType.TILLED || tile.getType() == TileType.PLANTED) {
+                    tile.startGrowth();
+                }
+            }
+        }
+    }
+
+    public boolean isNearPond(Point position) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0) continue;
+    
+                int x = position.x + dx;
+                int y = position.y + dy;
+    
+                if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
+                    Tile tile = grid[y][x];
+                    if (tile.getType() == TileType.POND) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
     
 }
