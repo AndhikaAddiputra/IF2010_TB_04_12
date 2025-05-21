@@ -1,13 +1,14 @@
 package model;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Player extends Character {
     private Integer energy;
     private char gender;
     private Integer gold;
     private Inventory inventory;
-    private List<NPC> partner;
+    private Map<NPC, String> partner;
     private String farmName;
     private Item[] favoriteItems;
     private boolean isInsideHouse;
@@ -18,7 +19,7 @@ public class Player extends Character {
         this.gender = gender;
         this.gold = 100; // Initialize gold
         this.inventory = new Inventory();
-        this.partner = null; // No partner initially
+        this.partner = new HashMap<>();
         this.farmName = farmName;
         this.favoriteItems = new Item[100]; 
         this.isInsideHouse = false; // Spawn di farmMap
@@ -48,15 +49,20 @@ public class Player extends Character {
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
-    public List<NPC> getPartner() {
+    public Map<NPC, String> getPartner() {
         return partner;
     }
-    public void addPartner(NPC partner) {
-        if (this.partner == null) {
-            this.partner = List.of(partner);
-        } else {
-            this.partner.add(partner);
-        }
+    public void setPartner(Map<NPC, String> partner) {
+        this.partner = partner;
+    }
+    public void setPartner(NPC partner, String status) {
+        this.partner.put(partner, status);
+    }
+    public String getPartnerStatus(NPC partner) {
+        return this.partner.get(partner);
+    }
+    public void removePartner(NPC partner) {
+        this.partner.remove(partner);
     }
     public String getFarmName() {
         return farmName;
