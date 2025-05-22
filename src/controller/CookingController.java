@@ -20,7 +20,7 @@ public class CookingController {
     }
 
     public void cook(String recipeName, String fuelName) {
-        if (!isNearHouse(player.getPosition())) {
+        if (!farmMap.isNearHouse(player.getPosition())) {
             System.out.println("You must be near the house to cook.");
             return;
         }
@@ -84,19 +84,4 @@ public class CookingController {
         System.out.println("You cooked " + recipeName + " successfully!");
     }
 
-    private boolean isNearHouse(Point pos) {
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dy = -1; dy <= 1; dy++) {
-                if (dx == 0 && dy == 0) continue;
-                Point neighbor = new Point(pos.x + dx, pos.y + dy);
-                if (farmMap.isValidPosition(neighbor)) {
-                    Tile tile = farmMap.getTileAt(neighbor);
-                    if (tile.getType() == TileType.HOUSE) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
 }

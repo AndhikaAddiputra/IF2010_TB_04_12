@@ -12,6 +12,7 @@ public class Player extends Character {
     private String farmName;
     private Item[] favoriteItems;
     private boolean isInsideHouse;
+    private boolean isOutsideFarm;
 
     public Player(String name, char gender, String farmName) {
         super(name);
@@ -23,6 +24,7 @@ public class Player extends Character {
         this.farmName = farmName;
         this.favoriteItems = new Item[100]; 
         this.isInsideHouse = false; // Spawn di farmMap
+        this.isOutsideFarm = false; // Spawn di farmMap
     }
 
     public int getEnergy() {
@@ -88,5 +90,24 @@ public class Player extends Character {
     public void setInsideHouse(boolean insideHouse) {
         isInsideHouse = insideHouse;
     }
-
+    public boolean isOutsideFarm() {
+        return isOutsideFarm;
+    }
+    public void setOutsideFarm(boolean outsideFarm) {
+        isOutsideFarm = outsideFarm;
+    }
+    public Item[] getFavoriteItems() {
+        return favoriteItems;
+    }
+    public void setFavoriteItems(Item[] favoriteItems) {
+        this.favoriteItems = favoriteItems;
+    }
+    public void addFavoriteItem(Item item) {
+        for (int i = 0; i < favoriteItems.length; i++) {
+            if (favoriteItems[i] == null) {
+                favoriteItems[i] = item;
+                break;
+            }
+        }
+    }
 }

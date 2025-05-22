@@ -7,6 +7,7 @@ public class MainDebug {
     public static void main(String[] args) {
         // Setup dasar permainan
         FarmMap farmMap = new FarmMap();
+        WorldMap worldMap = new WorldMap();
         Player player = new Player("Tester", 'M',"MyFarm");
         player.setPosition(new java.awt.Point(11, 10)); // Respawn di sisi rumah
 
@@ -31,6 +32,7 @@ public class MainDebug {
         gameState.setAutoSleepHandler(() -> farmController.sleep()); // handler autosleep nya
         CookingController cookingController = new CookingController(player, gameState, farmMap);
         FishingController fishingController = new FishingController();
+        WorldActionController worldController = new WorldActionController(player, worldMap, gameState);
 
         // Interface input CLI
         Scanner scanner = new Scanner(System.in);
@@ -90,13 +92,16 @@ public class MainDebug {
                         fishingController.fish(player, gameState);
                     }
                 }
-                case "set time" -> {
-                    System.out.print("Debug command");
-                    System.out.print("Enter new time (hour): ");
-                    Integer hourInput = scanner.nextInt();
-                    System.out.print("Enter new time (minute): ");
-                    Integer minuteInput = scanner.nextInt();
-                    gameState.setTime(new Time(hourInput, minuteInput));
+                case "sell" -> farmController.sell();
+                case "visit" -> worldController.visit();
+                // debugging
+                case "fly" -> {
+                    int inputX, inputY;
+                    System.out.print("Enter X coordinate: ");
+                    inputX = scanner.nextInt();
+                    System.out.print("Enter Y coordinate: ");
+                    inputY = scanner.nextInt();
+                    player.setPosition(new java.awt.Point(inputX, inputY));
                 }
                 default -> {
                     if (input.startsWith("move ")) {
@@ -119,10 +124,12 @@ public class MainDebug {
             }
 
             // Setelah aksi, tampilkan peta dan status
-            if (!player.isInsideHouse()) {
-                printFarmMap(farmMap, player);
-            } else {
+            if (player.isOutsideFarm()) {
+                System.out.println("You are at World Map.");
+            } else if (player.isInsideHouse()) {
                 System.out.println("🏠 You are currently inside the house.");
+            } else {
+                printFarmMap(farmMap, player);
             }
             farmController.debugShowPlayerStatus();
         }

@@ -2,6 +2,7 @@ package model;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,11 +20,29 @@ public class NPCRegistry {
             Set.of("Firewood", "Coal"),
             Set.of("Potato", "Wheat"),
             Set.of("Hot Pepper")));
+
+        // Handle khusus untuk Perry yang banyak mau
+        Set<String> allItems = new HashSet<>();
+        allItems.addAll(CropRegistry.getCropMap().keySet());
+        allItems.addAll(FishRegistry.getAllFishNames());
+        allItems.addAll(FoodRegistry.getFoodMap().keySet());
+        allItems.addAll(MiscRegistry.getAll().keySet());
+
+        // Define Perry's loved and liked items
+        Set<String> perryLoved = Set.of("Cranberry", "Blueberry");
+        Set<String> perryLiked = Set.of("Wine");
+
+        // Create Perry's hated items (all items minus loved and liked)
+        Set<String> perryHated = new HashSet<>(allItems);
+        perryHated.removeAll(perryLoved);
+        perryHated.removeAll(perryLiked);
+
         npcMap.put("Perry", new NPC(
             "Perry", 
-            Set.of("Cranberry", "Blueberry"), 
-            Set.of("Wine"), 
-            null));
+            perryLoved,
+            perryLiked, 
+            perryHated));
+
         npcMap.put("Dasco", new NPC(
             "Dasco", 
             Set.of("The Legends of Spakbor", "Cooked Pig's Head", "Wine", "Fugu", "Spakbor Salad"), 

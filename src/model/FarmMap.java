@@ -135,5 +135,42 @@ public class FarmMap {
         return false;
     }
     
+    public boolean isAtMapEdge(Point pos) {
+        return pos.x == 0 || pos.x == WIDTH - 1 || pos.y == 0 || pos.y == HEIGHT - 1;
+    }
+
+    public boolean isNearHouse(Point pos) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0) continue;
+                Point neighbor = new Point(pos.x + dx, pos.y + dy);
+                if (farmMap.isValidPosition(neighbor)) {
+                    Tile tile = farmMap.getTileAt(neighbor);
+                    if (tile.getType() == TileType.HOUSE) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // handler shopping tambahan
+    public boolean isNearShippingBin(Point pos){
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0) continue;
+                Point neighbor = new Point(pos.x + dx, pos.y + dy);
+                if (farmMap.isValidPosition(neighbor)) {
+                    Tile tile = farmMap.getTileAt(neighbor);
+                    if (tile.getType() == TileType.SHIPPING_BIN) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
     
 }

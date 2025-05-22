@@ -36,4 +36,14 @@ public class Item {
     public Integer getAddEnergy() {
         return 0;
     }
+
+    public Item getItem() {
+        return this;
+    }
+    public Item getItem(String itemName) {
+        if (this.itemName.equals(itemName)) {
+            return this;
+        }
+        return null;
+    }
 }

@@ -4,6 +4,9 @@ import model.*;
 import utility.*;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class FarmActionController {
     private Player player;
@@ -167,7 +170,7 @@ public class FarmActionController {
 
     public void enterHouse() {
         Point pos = player.getPosition();
-        boolean nearHouse = isNearHouse(pos);
+        boolean nearHouse = farmMap.isNearHouse(pos);
         if (!nearHouse) {
             System.out.println("You must be next to the house to enter.");
             return;
@@ -186,6 +189,8 @@ public class FarmActionController {
             System.out.println("📺 You need to be inside the house to check the weather.");
             return;
         }
+        player.reduceEnergy(5);
+        gameState.advanceTime(15);
         System.out.println("☁️ Today’s weather is: " + gameState.getWeather());
     }
     
@@ -211,55 +216,81 @@ public class FarmActionController {
     }
 
 
-    // handler sleep dan cooking tambahan
-    public boolean isNearHouse(Point pos) {
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dy = -1; dy <= 1; dy++) {
-                if (dx == 0 && dy == 0) continue;
-                Point neighbor = new Point(pos.x + dx, pos.y + dy);
-                if (farmMap.isValidPosition(neighbor)) {
-                    Tile tile = farmMap.getTileAt(neighbor);
-                    if (tile.getType() == TileType.HOUSE) {
-                        return true;
-                    }
-                }
-            }
+    public void sell() {
+        if (!farmMap.isNearShippingBin(player.getPosition())) {
+            System.out.println("❌ You must be near the Shipping Bin to sell.");
+            return;
         }
-        return false;
-    }
 
-    // handler shopping tambahan
-    public boolean isNearShippingBin(Point pos){
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dy = -1; dy <= 1; dy++) {
-                if (dx == 0 && dy == 0) continue;
-                Point neighbor = new Point(pos.x + dx, pos.y + dy);
-                if (farmMap.isValidPosition(neighbor)) {
-                    Tile tile = farmMap.getTileAt(neighbor);
-                    if (tile.getType() == TileType.SHIPPING_BIN) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+        Scanner scanner = new Scanner(System.in);
+        Inventory inventory = player.getInventory();
 
-    // handler fishing tambahan
-    public boolean isNearPond(Point pos){
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dy = -1; dy <= 1; dy++) {
-                if (dx == 0 && dy == 0) continue;
-                Point neighbor = new Point(pos.x + dx, pos.y + dy);
-                if (farmMap.isValidPosition(neighbor)) {
-                    Tile tile = farmMap.getTileAt(neighbor);
-                    if (tile.getType() == TileType.POND) {
-                        return true;
-                    }
-                }
-            }
+        System.out.println("📦 What do you want to sell?");
+        List<Item> items = new ArrayList<>(inventory.getAllItemsAsList());
+
+        if (items.isEmpty()) {
+            System.out.println("⚠️ You have nothing to sell.");
+            return;
         }
-        return false;
+
+        for (int i = 0; i < items.size(); i++) {
+            String name = items.get(i).getItemName();
+            int qty = inventory.getItemQuantity(name);
+            System.out.println((i + 1) + ". " + name + " x" + qty);
+        }
+
+        System.out.print("Select item number: ");
+        int choice;
+        try {
+            choice = Integer.parseInt(scanner.nextLine()) - 1;
+        } catch (Exception e) {
+            System.out.println("❌ Invalid input.");
+            return;
+        }
+
+        if (choice < 0 || choice >= items.size()) {
+            System.out.println("❌ Invalid choice.");
+            return;
+        }
+
+        Item selected = items.get(choice);
+        int maxQty = inventory.getItemQuantity(selected.getItemName());
+
+        System.out.print("Enter quantity to sell (1-" + maxQty + "): ");
+        int qty;
+        try {
+            qty = Integer.parseInt(scanner.nextLine());
+        } catch (Exception e) {
+            System.out.println("❌ Invalid quantity.");
+            return;
+        }
+
+        if (qty < 1 || qty > maxQty) {
+            System.out.println("❌ Invalid quantity range.");
+            return;
+        }
+
+        int total = 0;
+
+        if (selected instanceof Crop) {
+            total = ((Crop) selected).getSellPrice() * qty;
+        } else if (selected instanceof Fish) {
+            total = ((Fish) selected).getPrice() * qty;
+        } else if (selected instanceof Food) {
+            total = ((Food) selected).getSellPrice() * qty;
+        } else {
+            System.out.println("⚠️ This item cannot be sold.");
+            return;
+        }
+
+        System.out.println("🛒 Selling " + qty + " x " + selected.getItemName() + " for " + total + " gold...");
+
+        // Proses jual: pause waktu, kurangi item, tambahkan gold
+        inventory.removeItem(selected.getItemName(), qty);
+        player.setGold(player.getGold() + total);
+
+        gameState.advanceTime(15); // Tambahkan waktu 15 menit
+        System.out.println("💰 You received " + total + " gold.");
     }
 
     // Debug method
