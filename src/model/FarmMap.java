@@ -5,8 +5,8 @@ import utility.Season;
 import utility.TileType;
 
 public class FarmMap {
-    private static final int WIDTH = 32;
-    private static final int HEIGHT = 32;
+    public static final int WIDTH = 32;
+    public static final int HEIGHT = 32;
     private Tile[][] grid;
     private Point playerPosition;
     private Point housePosition;
@@ -144,8 +144,8 @@ public class FarmMap {
             for (int dy = -1; dy <= 1; dy++) {
                 if (dx == 0 && dy == 0) continue;
                 Point neighbor = new Point(pos.x + dx, pos.y + dy);
-                if (farmMap.isValidPosition(neighbor)) {
-                    Tile tile = farmMap.getTileAt(neighbor);
+                if (isValidPosition(neighbor)) {
+                    Tile tile = getTileAt(neighbor);
                     if (tile.getType() == TileType.HOUSE) {
                         return true;
                     }
@@ -161,8 +161,8 @@ public class FarmMap {
             for (int dy = -1; dy <= 1; dy++) {
                 if (dx == 0 && dy == 0) continue;
                 Point neighbor = new Point(pos.x + dx, pos.y + dy);
-                if (farmMap.isValidPosition(neighbor)) {
-                    Tile tile = farmMap.getTileAt(neighbor);
+                if (isValidPosition(neighbor)) {
+                    Tile tile = getTileAt(neighbor);
                     if (tile.getType() == TileType.SHIPPING_BIN) {
                         return true;
                     }

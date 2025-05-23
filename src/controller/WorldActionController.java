@@ -9,11 +9,15 @@ public class WorldActionController {
     private Player player;
     private final WorldMap worldMap;
     private GameState gameState;
+    private MessageListener messageListener;
+    private UserInputListener inputListener;
 
-    public WorldActionController(Player player, WorldMap worldMap, GameState gameState) {
+    public WorldActionController(Player player, WorldMap worldMap, GameState gameState, MessageListener messageListener, UserInputListener userInputListener) {
         this.player = player;
         this.worldMap = worldMap;
         this.gameState = gameState;
+        this.messageListener = messageListener;
+        this.inputListener = userInputListener;
     }
 
     public void setGameState(GameState gameState) {
@@ -24,73 +28,82 @@ public class WorldActionController {
     // Check if player is at the edge of farm map (x = 31 or y = 31)
         Point pos = player.getPosition();
         if (pos.x < 31 && pos.y < 31 && pos.x > 0 && pos.y > 0) {
-            System.out.println("❌ You must be at the edge of your farm to leave.");
+            notify("❌ You must be at the edge of your farm to leave.");
+            //System.out.println("❌ You must be at the edge of your farm to leave.");
             return;
         }
+        notify("📍 Available locations to visit:");
+        notify("\nNPC Houses:");
+        notify("1. Mayor Tadi's House");
+        notify("2. Caroline's House");
+        notify("3. Perry's House");
+        notify("4. Dasco's House");
+        notify("5. Abigail's House");
+        notify("6. Emily's Store");
 
-        System.out.println("📍 Available locations to visit:");
-        System.out.println("\nNPC Houses:");
-        System.out.println("1. Mayor Tadi's House");
-        System.out.println("2. Caroline's House");
-        System.out.println("3. Perry's House");
-        System.out.println("4. Dasco's House");
-        System.out.println("5. Abigail's House");
-        System.out.println("6. Emily's Store");
+        notify("\nOther Locations:");
+        notify("7. Forest River");
+        notify("8. Mountain Lake");
+        notify("9. Ocean");
+        //System.out.println("📍 Available locations to visit:");
+        //System.out.println("\nNPC Houses:");
+        //System.out.println("1. Mayor Tadi's House");
+        //System.out.println("2. Caroline's House");
+        //System.out.println("3. Perry's House");
+        //System.out.println("4. Dasco's House");
+        //System.out.println("5. Abigail's House");
+        //System.out.println("6. Emily's Store");
         
-        System.out.println("\nOther Locations:");
-        System.out.println("7. Forest River");
-        System.out.println("8. Mountain Lake");
-        System.out.println("9. Ocean");
+        //System.out.println("\nOther Locations:");
+        //System.out.println("7. Forest River");
+        //System.out.println("8. Mountain Lake");
+        //System.out.println("9. Ocean");
 
         // Get player choice
-        System.out.print("\nEnter location number (1-9): ");
-        Scanner scanner = new Scanner(System.in);
-        int choice;
-        try {
-            choice = Integer.parseInt(scanner.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("❌ Invalid input.");
-            return;
-        }
-
-        Location destination = null;
-        switch (choice) {
-            case 1 -> destination = worldMap.getLocation("Mayor Tadi's House");
-            case 2 -> destination = worldMap.getLocation("Caroline's House");
-            case 3 -> destination = worldMap.getLocation("Perry's House");
-            case 4 -> destination = worldMap.getLocation("Dasco's House");
-            case 5 -> destination = worldMap.getLocation("Abigail's House");
-            case 6 -> destination = worldMap.getLocation("Store");
-            case 7 -> destination = worldMap.getLocation("ForestRiver");
-            case 8 -> destination = worldMap.getLocation("MountainLake");
-            case 9 -> destination = worldMap.getLocation("Ocean");
-            default -> {
-                System.out.println("❌ Invalid location number.");
+        notify("🌍 Enter location number (1-9): ");
+        inputListener.requestInput("Enter location number (1-9):", input -> {
+            int choice;
+            try {
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                notify("❌ Invalid number.");
                 return;
             }
-        }
 
-        if (destination != null) {
-            player.setOutsideFarm(true);
-            player.reduceEnergy(10);
-            gameState.setInWorldMap(true);
-            gameState.setCurrentWorldLocation(destination);
-            destination.visit(player);
-            gameState.advanceTime(15);
-            System.out.println("🚶 Traveled to " + destination.getName() + ".");
-            handleLocationActions(destination);
-        }
+            Location selected = switch (choice) {
+                case 1 -> new NPCBuilding("Mayor Tadi");
+                case 2 -> new NPCBuilding("Caroline");
+                case 3 -> new NPCBuilding("Perry");
+                case 4 -> new NPCBuilding("Dasco");
+                case 5 -> new NPCBuilding("Abigail");
+                case 6 -> new Store("Emily");
+                case 7 -> new ForestRiver();
+                case 8 -> new MountainLake();
+                case 9 -> new Ocean();
+                default -> null;
+            };
+
+            if (selected == null) {
+                notify("❌ Invalid selection.");
+            } else {
+                gameState.setInWorldMap(true);
+                gameState.setCurrentWorldLocation(selected);
+                notify("🧭 Visiting " + selected.getName());
+            }
+        });
     }
 
     public void back(){
         if (!player.isOutsideFarm()) {
-            System.out.println("❌ You are not at the world map.");
+            notify("❌ You are not at the world map.");
+            //System.out.println("❌ You are not at the world map.");
             return;
         }
         player.setOutsideFarm(false);
         gameState.setInWorldMap(false);
         gameState.setCurrentWorldLocation(null);
-        System.out.println("🏠 You are back at your farm.");
+        notify("🏠 You are back at your farm.");
+        //System.out.println("🏠 You are back at your farm.");
     }
 
     public void handleLocationActions(Location location) {
@@ -173,87 +186,103 @@ public class WorldActionController {
     public void propose(String npcName) {
         NPC npc = NPCRegistry.get(npcName);
         if (npc == null) {
-            System.out.println("NPC not found.");
+            notify("NPC not found.");
+            //System.out.println("NPC not found.");
             return;
         }
         if (!player.getInventory().hasItem("Proposal Ring")) {
-            System.out.println("You need a Proposal Ring to propose.");
+            notify("You need a Proposal Ring to propose.");
+            //System.out.println("You need a Proposal Ring to propose.");
             return;
         }
         if (npc.getHeartPoints() < 150) {
-            System.out.println(npcName + " is not ready to be proposed (need 150 heart points).");
+            notify(npcName + " is not ready to be proposed (need 150 heart points).");
+            //System.out.println(npcName + " is not ready to be proposed (need 150 heart points).");
             return;
         }
         if (npc.getStatus() == RelationshipStatus.FIANCE || npc.getStatus() == RelationshipStatus.SPOUSE) {
-            System.out.println(npcName + " is already your fiance or married.");
+            notify(npcName + " is already your fiance or married.");
+            //System.out.println(npcName + " is already your fiance or married.");
             return;
         }
         npc.setStatus(RelationshipStatus.FIANCE);
         player.reduceEnergy(10);
         gameState.advanceTime(60);
-        System.out.println("Congratulations! " + npcName + " accepted your proposal.");
+        notify("Congratulations! " + npcName + " accepted your proposal.");
+        //System.out.println("Congratulations! " + npcName + " accepted your proposal.");
     }
 
     // Menikah dengan NPC
     public void marry(String npcName) {
         NPC npc = NPCRegistry.get(npcName);
         if (npc == null || npc.getStatus() != RelationshipStatus.FIANCE) {
-            System.out.println("You can only marry your fiance.");
+            notify("You can only marry your fiance.");
+            //System.out.println("You can only marry your fiance.");
             return;
         }
         if (!player.getInventory().hasItem("Proposal Ring")) {
-            System.out.println("You need a Proposal Ring to marry.");
+            notify("You need a Proposal Ring to marry.");
+            //System.out.println("You need a Proposal Ring to marry.");
             return;
         }
         player.reduceEnergy(80);
         gameState.setTime(new Time(22, 0));
         npc.setStatus(RelationshipStatus.SPOUSE);
         player.setPartner(npc, npc.getStatus().getStatusString());
-        System.out.println("You are now married to " + npcName + "! Time skips to 22:00 and you are sent home.");
+        notify("You are now married to " + npcName + "! Time skips to 22:00 and you are sent home.");
+        //System.out.println("You are now married to " + npcName + "! Time skips to 22:00 and you are sent home.");
     }
 
     // Menonton TV di rumah NPC
     public void watchTV() {
         if (!player.getPosition().equals(new Point(10, 10))) {
-            System.out.println("You can only watch TV at home.");
+            notify("You can only watch TV at home.");
+            //System.out.println("You can only watch TV at home.");
             return;
         }
         player.reduceEnergy(5);
         gameState.advanceTime(15);
-        System.out.println("You watched TV for 15 minutes. -5 energy.");
+        notify("You watched TV for 15 minutes. -5 energy.");
+        //System.out.println("You watched TV for 15 minutes. -5 energy.");
     }
 
     // Chatting dengan NPC di rumah NPC
     public void chat(String npcName, Point npcHomePosition) {
         NPC npc = NPCRegistry.get(npcName);
         if (npc == null) {
-            System.out.println("NPC not found.");
+            notify("NPC not found.");
+            //System.out.println("NPC not found.");
             return;
         }
         if (npcHomePosition == null || !player.getPosition().equals(npcHomePosition)) {
-            System.out.println("You must be at " + npcName + "'s house to chat.");
+            notify("You must be at " + npcName + "'s house to chat.");
+            //System.out.println("You must be at " + npcName + "'s house to chat.");
             return;
         }
         player.reduceEnergy(10);
         gameState.advanceTime(10);
         npc.setHeartPoints(npc.getHeartPoints() + 10);
-        System.out.println("You chatted with " + npcName + ". +10 heart points, -10 energy.");
+        notify("You chatted with " + npcName + ". +10 heart points, -10 energy.");
+        //System.out.println("You chatted with " + npcName + ". +10 heart points, -10 energy.");
     }
 
     // Memberi hadiah ke NPC di rumah NPC
     public void gift(String npcName, String itemName, Point npcHomePosition) {
         NPC npc = NPCRegistry.get(npcName);
         if (npc == null) {
-            System.out.println("NPC not found.");
+            notify("NPC not found.");
+            //System.out.println("NPC not found.");
             return;
         }
         if (npcHomePosition == null || !player.getPosition().equals(npcHomePosition)) {
-            System.out.println("You must be at " + npcName + "'s house to give a gift.");
+            notify("You must be at " + npcName + "'s house to give a gift.");
+            //System.out.println("You must be at " + npcName + "'s house to give a gift.");
             return;
         }
         Item item = player.getInventory().getItem(itemName);
         if (item == null) {
-            System.out.println("You don't have " + itemName + " to give.");
+            notify("You don't have " + itemName + " to give.");
+            //System.out.println("You don't have " + itemName + " to give.");
             return;
         }
         int heartDelta = 0;
@@ -268,6 +297,15 @@ public class WorldActionController {
         player.getInventory().removeItem(itemName, 1);
         player.reduceEnergy(5);
         gameState.advanceTime(10);
-        System.out.println("You gave " + itemName + " to " + npcName + ". Heart points: " + (heartDelta >= 0 ? "+" : "") + heartDelta + ", -5 energy.");
+        notify("You gave " + itemName + " to " + npcName + ". Heart points: " + (heartDelta >= 0 ? "+" : "") + heartDelta + ", -5 energy.");
+        //System.out.println("You gave " + itemName + " to " + npcName + ". Heart points: " + (heartDelta >= 0 ? "+" : "") + heartDelta + ", -5 energy.");
+    }
+
+    private void notify(String msg) {
+        if (messageListener != null) {
+            messageListener.onMessage(msg);
+        } else {
+            System.out.println(msg); // fallback CLI
+        }
     }
 }

@@ -1,6 +1,8 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RecipeRegistry {
@@ -74,5 +76,9 @@ public class RecipeRegistry {
 
     public static Map<String, Recipe> getAllRecipes() {
         return recipeMap;
+    }
+
+    public static List<Recipe> getAll() {
+        return new ArrayList<>(recipeMap.values());
     }
 }

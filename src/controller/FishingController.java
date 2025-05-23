@@ -1,10 +1,10 @@
 package controller;
 
 import model.*;
-import utility.GameState;
+import utility.MessageListener;
 import utility.Season;
 import utility.TileType;
-import utility.Time;
+import utility.UserInputListener;
 import utility.Weather;
 
 import java.util.List;
@@ -15,6 +15,13 @@ import java.awt.Point;
 
 public class FishingController {
     private final Random random = new Random();
+    private MessageListener messageListener;
+    private UserInputListener userInputListener;
+
+    public FishingController(MessageListener messageListener, UserInputListener userInputListener) {
+        this.messageListener = messageListener;
+        this.userInputListener = userInputListener;
+    }
 
     public void fish(Player player, GameState gameState) {
         // 1. Validasi lokasi
@@ -29,7 +36,8 @@ public class FishingController {
 
         // 2. Validasi energi
         if (player.getEnergy() < -15) {
-            System.out.println("⚠️ Not enough energy to fish.");
+            notify("⚠️ Not enough energy to fish.");
+            //System.out.println("⚠️ Not enough energy to fish.");
             return;
         }
 
@@ -48,7 +56,8 @@ public class FishingController {
             ).collect(Collectors.toList());
 
         if (eligibleFish.isEmpty()) {
-            System.out.println("🐟 No fish appear at this time and place.");
+            notify("🐟 No fish appear at this time and place.");
+            //System.out.println("🐟 No fish appear at this time and place.");
             return;
         }
 
@@ -77,46 +86,70 @@ public class FishingController {
 
         int target = random.nextInt(upperBound) + 1;
 
-        System.out.println("🎣 You cast your line...");
-        System.out.println("💡 A " + selectedFish.getItemName() + " is biting! Guess a number between 1 and " + maxAttempts+ ". It's a common fish!" +selectedFish.getType());
+        notify("🎣 You cast your line...");
+        notify("💡 A " + selectedFish.getItemName() + " is biting! Guess a number between 1 and " + upperBound + ". It's a common fish!" + selectedFish.getType());
+        //System.out.println("🎣 You cast your line...");
+        //System.out.println("💡 A " + selectedFish.getItemName() + " is biting! Guess a number between 1 and " + upperBound+ ". It's a common fish!" +selectedFish.getType());
 
         // 6. Pause waktu, -5 energi, +15 menit setelah selesai
         player.setEnergy(player.getEnergy() - 5);
 
-        Scanner scanner = new Scanner(System.in);
-        int attempt = 0;
-        boolean success = false;
+        startGuessingGame(maxAttempts, target,
+            () -> {
+                // success: tambahkan ikan ke inventory
+                player.getInventory().addItem(selectedFish, 1);
+                notify("🎣 " + selectedFish.getItemName() + " added to inventory.");
+            },
+            () -> {
+                // failed
+                notify("😭 You failed to catch the fish.");
+            }
+        );
+    }
 
-        while (attempt < maxAttempts) {
-            System.out.print("🔢 Attempt " + (attempt + 1) + ": Your guess? ");
-            String input = scanner.nextLine();
-
+    private void startGuessingGame(int maxAttempts, int target, Runnable onSuccess, Runnable onFail) {
+        attemptGuess(0, maxAttempts, target, onSuccess, onFail);
+    }
+    
+    private void attemptGuess(int attempt, int maxAttempts, int target, Runnable onSuccess, Runnable onFail) {
+        if (attempt >= maxAttempts) {
+            notify("❌ Out of attempts! The correct number was " + target);
+            onFail.run();
+            return;
+        }
+    
+        notify("🔢 Attempt " + (attempt + 1) + ":");
+    
+        userInputListener.requestInput("Enter your guess:", input -> {
             int guess;
             try {
                 guess = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println("⚠️ Invalid input. Please enter a number.");
-                continue;
+                notify("⚠️ Invalid input. Please enter a number.");
+                // Coba lagi dengan attempt yang sama
+                attemptGuess(attempt, maxAttempts, target, onSuccess, onFail);
+                return;
             }
-
+    
             if (guess == target) {
-                success = true;
-                break;
+                notify("✅ Correct! You caught the fish!");
+                onSuccess.run();
             } else if (guess < target) {
-                System.out.println("📉 Too low!");
+                notify("📉 Too low!");
+                attemptGuess(attempt + 1, maxAttempts, target, onSuccess, onFail);
             } else {
-                System.out.println("📈 Too high!");
+                notify("📈 Too high!");
+                attemptGuess(attempt + 1, maxAttempts, target, onSuccess, onFail);
             }
-            attempt++;
-        }
+        });
+    }
+    
 
-        // 7. Hasil
-        gameState.advanceTime(15);
-        if (success) {
-            player.getInventory().addItem(selectedFish);
-            System.out.println("✅ You caught a " + selectedFish.getItemName() + "!");
+    private void notify(String msg) {
+        if (messageListener != null) {
+            messageListener.onMessage(msg);
         } else {
-            System.out.println("❌ The fish escaped...");
+            System.out.println(msg); // fallback CLI
         }
     }
 

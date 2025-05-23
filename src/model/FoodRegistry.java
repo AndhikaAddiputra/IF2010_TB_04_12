@@ -18,7 +18,7 @@ public class FoodRegistry {
         foodMap.put("Spakbor Salad", new Food("Spakbor Salad", 70, 0, 250));
         foodMap.put("Fish Sandwich", new Food("Fish Sandwich", 50, 200, 180));
         foodMap.put("The Legends of Spakbor", new Food("The Legends of Spakbor", 100, 0, 2000));
-        foodMap.put("Cookde Pig's Head", new Food("Cooked Pig's Head", 100, 1000, 0));
+        foodMap.put("Cooked Pig's Head", new Food("Cooked Pig's Head", 100, 1000, 0));
     }
 
     public static Food getFood(String itemName) {

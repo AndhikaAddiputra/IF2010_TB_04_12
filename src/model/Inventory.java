@@ -57,11 +57,17 @@ public class Inventory {
         return items.containsKey(itemName);
     }
 
-    public boolean hasItem(String itemName, int quantity) {
+    //public boolean hasItem(String itemName, int quantity) {
+      //  InventoryEntry entry = items.get(itemName);
+        //int itemQuantity = entry.getQuantity();
+        //return items.containsKey(itemName) && itemQuantity >= quantity;
+    //}
+
+    public boolean hasItem(String itemName, int requiredQty) {
         InventoryEntry entry = items.get(itemName);
-        int itemQuantity = entry.getQuantity();
-        return items.containsKey(itemName) && itemQuantity >= quantity;
+        return entry != null && entry.getQuantity() >= requiredQty;
     }
+    
 
     public Set<String> getAllItemNames() {
         return items.keySet();
