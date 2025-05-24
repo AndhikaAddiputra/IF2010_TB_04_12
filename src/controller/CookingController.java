@@ -22,9 +22,22 @@ public class CookingController {
         this.inputListener = inputListener;
     }
 
+    private boolean canPerformAction(int energyCost) {
+        if (player.getEnergy() - energyCost < -20) {
+            notify("You are too exhausted to perform this action.");
+            //System.out.println("You are too exhausted to perform this action.");
+            return false;
+        }
+        return true;
+    }
+
     public void cook(String recipeName, String fuelName) {
         if (!farmMap.isNearHouse(player.getPosition())) {
             notify("❌ You must be near the house to cook.");
+            return;
+        }
+        if (!canPerformAction(10)) {
+            notify("❌ Not enough energy to cook. You need at least 10 energy.");
             return;
         }
     
@@ -78,7 +91,10 @@ public class CookingController {
     
         // Process cooking
         player.reduceEnergy(10);
-        gameState.advanceTime(60);
+        gameState.advanceTime(5);
+        player.setCurrentCooking(new CookingTask(recipe));
+
+        notify("👩‍🍳 Cooking started: " + recipeName + ". It will be ready in 60 minutes.");
     
         if (!warnedAboutIngredients) {
             // Remove ingredients only if we have them all
@@ -99,9 +115,9 @@ public class CookingController {
             player.getInventory().removeItem(fuelName, 1);
         }
     
-        Food cooked = recipe.getFood();
+        /*Food cooked = recipe.getFood();
         player.getInventory().addItem(cooked);
-        notify("✅ You cooked " + cooked.getItemName() + " successfully!");
+        notify("✅ You cooked " + cooked.getItemName() + " successfully!");*/
     }
 
     public void startCookingFlow() {

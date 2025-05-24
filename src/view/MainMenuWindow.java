@@ -1,15 +1,13 @@
 package view;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.Character;
-
+import javax.swing.*;
 import model.*;
 import utility.MusicPlayer;
 import utility.Season;
 import utility.Weather;
-import controller.*;
 
 public class MainMenuWindow extends JFrame {
     private JTextField playerNameField;
@@ -70,7 +68,7 @@ public class MainMenuWindow extends JFrame {
 
         // Music
         musicPlayer = new MusicPlayer();
-        musicPlayer.play("/assets/music/background_music.wav");
+        musicPlayer.play("/assets/music/music_background.wav");
 
         // Add volume control
         JPanel controlPanel = new JPanel();
@@ -136,7 +134,7 @@ public class MainMenuWindow extends JFrame {
         player.setPosition(new java.awt.Point(11, 10));
     
         // Add starter items to inventory
-        player.getInventory().addItem(SeedsRegistry.getSeeds("Parnsnip Seeds"), 5);
+        player.getInventory().addItem(SeedsRegistry.getSeeds("Wheat Seeds"), 5);
         player.getInventory().addItem(CropRegistry.getCrop("Wheat"), 5);
         player.getInventory().addItem(FishRegistry.getFish("Salmon"), 3);
         player.getInventory().addItem(RecipeRegistry.getRecipe("Baguette Recipe"), 1);
@@ -147,17 +145,14 @@ public class MainMenuWindow extends JFrame {
         player.getInventory().addItem(EquipmentRegistry.getEquipment("Pickaxe"), 1);
     
         // Create game state and window
-        GameState gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false);
+        GameState gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false, null);
+
+        // Then create window with gameState
         FarmWindow window = new FarmWindow(player, farmMap, gameState, worldMap);
-    
-        // Create and set controllers
-        FarmActionController farmController = new FarmActionController(player, farmMap, gameState, window, window);
-        FishingController fishingController = new FishingController(window, window);
-        WorldActionController worldController = new WorldActionController(player, worldMap, gameState, window, window);
-    
-        window.setFarmController(farmController);
-        window.setFishingController(fishingController);
-        window.setWorldController(worldController);
+        
+        // Update GameState with window as listener
+        gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false, window);
+        window.setGameState(gameState);
     
         // Show game window
         SwingUtilities.invokeLater(() -> {

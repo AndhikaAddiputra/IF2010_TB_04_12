@@ -7,7 +7,7 @@ public class CropRegistry {
     private static final Map<String, Crop> cropMap = new HashMap<>();
 
     static {
-        cropMap.put("Parsnip", new Crop("Parsnip", 50, 35, 1, "Parnsnip Seeds"));
+        cropMap.put("Parsnip", new Crop("Parsnip", 50, 35, 1, "Parsnip Seeds"));
         cropMap.put("Cauliflower", new Crop("Cauliflower", 200, 150, 1, "Cauliflower Seeds"));
         cropMap.put("Potato", new Crop("Potato", 0, 80, 1, "Potato Seeds"));
         cropMap.put("Wheat", new Crop("Wheat", 50, 30, 3, "Wheat Seeds"));

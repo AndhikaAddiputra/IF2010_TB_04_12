@@ -35,7 +35,10 @@ public class FarmWindow extends JFrame implements MessageListener, UserInputList
         this.worldMap = worldMap;
 
         this.controllerFactory = new ControllerFactory(player, gameState, farmMap, this, this);
+
         this.farmController = controllerFactory.createFarmActionController();
+        this.fishingController = controllerFactory.createFishingController();
+        this.worldController = controllerFactory.createWorldActionController();
 
         setTitle("Spakbor Hills");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -47,6 +50,7 @@ public class FarmWindow extends JFrame implements MessageListener, UserInputList
         refreshAll();
     }
 
+    /*
     public void setFarmController(FarmActionController controller) {
         this.farmController = controller;
     }
@@ -57,6 +61,12 @@ public class FarmWindow extends JFrame implements MessageListener, UserInputList
 
     public void setFishingController(FishingController controller) {
         this.fishingController = controller;
+    }
+    */
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+        refreshAll(); // Refresh UI with new GameState
     }
 
     private void initUI() {
@@ -162,7 +172,11 @@ public class FarmWindow extends JFrame implements MessageListener, UserInputList
         });
 
         addButton("Visit", () -> {
-            worldController.visit();
+            if (gameState.getTime().getHour() >= 22) {
+                showMessage("🚫 It's too late to visit anyone.");
+                return;
+            }
+            openVisitPanel();
         });
 
         // Map Panel (Tengah)
@@ -389,6 +403,16 @@ public class FarmWindow extends JFrame implements MessageListener, UserInputList
         // TAMPILKAN POPUP
         JOptionPane.showMessageDialog(this, detailPanel, item.getItemName(), JOptionPane.PLAIN_MESSAGE);
     }
+
+    private void openVisitPanel() {
+        Point pos = player.getPosition();
+        if (pos.x < 31 && pos.y < 31 && pos.x > 0 && pos.y > 0) {
+            showMessage("❌ You must be at the edge of your farm to leave.");
+            return;
+        }
     
+        VisitPanel visitPanel = new VisitPanel(player, gameState, farmMap);
+        visitPanel.setVisible(true);
+    }
     
 }

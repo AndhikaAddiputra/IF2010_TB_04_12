@@ -1,17 +1,13 @@
 package controller;
 
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 import model.*;
 import utility.MessageListener;
 import utility.Season;
-import utility.TileType;
 import utility.UserInputListener;
 import utility.Weather;
-
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.awt.Point;
 
 public class FishingController {
     private final Random random = new Random();

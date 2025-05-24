@@ -13,12 +13,13 @@ public class Player extends Character {
     private Item[] favoriteItems;
     private boolean isInsideHouse;
     private boolean isOutsideFarm;
+    private CookingTask currentCooking;
 
     public Player(String name, char gender, String farmName) {
         super(name);
         this.energy = 100;
         this.gender = gender;
-        this.gold = 100; // Initialize gold
+        this.gold = 1000; // Initialize gold
         this.inventory = new Inventory();
         this.partner = new HashMap<>();
         this.farmName = farmName;
@@ -109,5 +110,13 @@ public class Player extends Character {
                 break;
             }
         }
+    }
+
+    public CookingTask getCurrentCooking() {
+        return currentCooking;
+    }
+    
+    public void setCurrentCooking(CookingTask task) {
+        this.currentCooking = task;
     }
 }

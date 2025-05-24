@@ -75,9 +75,9 @@ public class FarmActionController {
         if (canPerformAction(5)){
             player.reduceEnergy(5);
             gameState.advanceTime(5);
+            tile.setType(TileType.TILLED);
+            notify("You tilled the land.");
         }
-        tile.setType(TileType.TILLED);
-        notify("You tilled the land.");
         //System.out.println("You tilled the land.");
     }
 
@@ -102,11 +102,11 @@ public class FarmActionController {
         if (canPerformAction(5)){
             player.reduceEnergy(5);
             gameState.advanceTime(5);
+            tile.setType(TileType.PLANTED);
+            tile.setSeed(seed);
+            player.getInventory().removeItem(seedName, 1);
+            notify("You planted: " + seedName);
         }
-        tile.setType(TileType.PLANTED);
-        tile.setSeed(seed);
-        player.getInventory().removeItem(seedName, 1);
-        notify("You planted: " + seedName);
         //System.out.println("You planted: " + seedName);
     }
 
@@ -125,9 +125,9 @@ public class FarmActionController {
         if (canPerformAction(5)){
             player.reduceEnergy(5);
             gameState.advanceTime(5);
+            tile.startGrowth();
+            notify("You watered the crop.");
         }
-        tile.startGrowth();
-        notify("You watered the crop.");
         //System.out.println("You watered the crop.");
     }
 
@@ -152,10 +152,10 @@ public class FarmActionController {
         if (canPerformAction(5 * units)){
             player.reduceEnergy(5 * units);
             gameState.advanceTime(5 * units);
+            tile.setType(TileType.TILLABLE);
+            tile.clearSeed();
+            notify("You harvested: " + units + " unit(s) of " + crop.getItemName());
         }
-        tile.setType(TileType.TILLABLE);
-        tile.clearSeed();
-        notify("You harvested: " + units + " unit(s) of " + crop.getItemName());
         //System.out.println("You harvested: " + units + " unit(s) of " + crop.getItemName());
     }
 
@@ -169,9 +169,9 @@ public class FarmActionController {
         if (canPerformAction(5)){
             player.reduceEnergy(5);
             gameState.advanceTime(5);
+            tile.setType(TileType.TILLABLE);
+            notify("You recovered the land.");
         }
-        tile.setType(TileType.TILLABLE);
-        notify("You recovered the land.");
         //System.out.println("You recovered the land.");
     }
 
@@ -235,15 +235,17 @@ public class FarmActionController {
             if (currentEnergy >= 10) {
                 player.setEnergy(100);
                 notify("You slept well in the house. Energy fully restored.");
+                gameState.setTime(new Time(6, 0));
+                gameState.advanceDay();
                 //System.out.println("You slept well in the house. Energy fully restored.");
             } else {
                 player.setEnergy(50);
                 notify("You slept poorly due to low energy. Energy set to 50.");
+                gameState.setTime(new Time(6, 0));
+                gameState.advanceDay();
                 //System.out.println("You slept poorly due to low energy. Energy set to 50.");
             }
         }
-        gameState.setTime(new Time(6, 0));
-        gameState.advanceDay();
     }
 
 

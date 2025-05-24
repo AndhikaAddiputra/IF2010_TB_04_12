@@ -89,7 +89,6 @@ public class HouseWindow extends JFrame implements MessageListener, UserInputLis
         actionPanel.add(Box.createVerticalGlue());
 
         addButton("Sleep", () -> {
-            // Pass this HouseWindow as the MessageListener to FarmActionController
             farmController = new FarmActionController(
                 player, 
                 farmMap, 

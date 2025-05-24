@@ -24,6 +24,15 @@ public class WorldActionController {
         this.gameState = gameState;
     }
 
+    private boolean canPerformAction(int energyCost) {
+        if (player.getEnergy() - energyCost < -20) {
+            notify("You are too exhausted to perform this action.");
+            //System.out.println("You are too exhausted to perform this action.");
+            return false;
+        }
+        return true;
+    }
+
     public void visit() {
     // Check if player is at the edge of farm map (x = 31 or y = 31)
         Point pos = player.getPosition();
@@ -32,6 +41,12 @@ public class WorldActionController {
             //System.out.println("❌ You must be at the edge of your farm to leave.");
             return;
         }
+
+        if (!canPerformAction(10)){
+            notify("❌ You don't have enough energy to visit the world map. You need at least 10 energy.");
+            return;
+        }
+
         notify("📍 Available locations to visit:");
         notify("\nNPC Houses:");
         notify("1. Mayor Tadi's House");
@@ -45,19 +60,6 @@ public class WorldActionController {
         notify("7. Forest River");
         notify("8. Mountain Lake");
         notify("9. Ocean");
-        //System.out.println("📍 Available locations to visit:");
-        //System.out.println("\nNPC Houses:");
-        //System.out.println("1. Mayor Tadi's House");
-        //System.out.println("2. Caroline's House");
-        //System.out.println("3. Perry's House");
-        //System.out.println("4. Dasco's House");
-        //System.out.println("5. Abigail's House");
-        //System.out.println("6. Emily's Store");
-        
-        //System.out.println("\nOther Locations:");
-        //System.out.println("7. Forest River");
-        //System.out.println("8. Mountain Lake");
-        //System.out.println("9. Ocean");
 
         // Get player choice
         notify("🌍 Enter location number (1-9): ");
@@ -131,11 +133,11 @@ public class WorldActionController {
                 String npcName = npcHouse.getNPC().getName();
     
                 switch (input) {
-                    case "1" -> chat(npcName, player.getPosition());
+                    case "1" -> chat(npcName);
                     case "2" -> {
                         System.out.print("Enter item name to gift: ");
                         String itemName = scanner.nextLine();
-                        gift(npcName, itemName, player.getPosition());
+                        gift(npcName, itemName);
                     }
                     case "3" -> {
                         NPC npc = NPCRegistry.get(npcName);
@@ -190,13 +192,19 @@ public class WorldActionController {
             //System.out.println("NPC not found.");
             return;
         }
+        if (!canPerformAction(20)){
+            notify("❌ You don't have enough energy to propose your love one. You need at least 20 energy.");
+            return;
+        }
         if (!player.getInventory().hasItem("Proposal Ring")) {
             notify("You need a Proposal Ring to propose.");
             //System.out.println("You need a Proposal Ring to propose.");
             return;
         }
         if (npc.getHeartPoints() < 150) {
-            notify(npcName + " is not ready to be proposed (need 150 heart points).");
+            notify(npcName + " is not ready to be proposed (need 150 heart points). Lamaranmu gagal lek");
+            player.reduceEnergy(20);
+            gameState.advanceTime(60);
             //System.out.println(npcName + " is not ready to be proposed (need 150 heart points).");
             return;
         }
@@ -218,6 +226,10 @@ public class WorldActionController {
         if (npc == null || npc.getStatus() != RelationshipStatus.FIANCE) {
             notify("You can only marry your fiance.");
             //System.out.println("You can only marry your fiance.");
+            return;
+        }
+        if (!canPerformAction(80)){
+            notify("❌ You don't have enough energy to marry. You need at least 80 energy.");
             return;
         }
         if (!player.getInventory().hasItem("Proposal Ring")) {
@@ -247,18 +259,18 @@ public class WorldActionController {
     }
 
     // Chatting dengan NPC di rumah NPC
-    public void chat(String npcName, Point npcHomePosition) {
+    public void chat(String npcName) {
         NPC npc = NPCRegistry.get(npcName);
         if (npc == null) {
             notify("NPC not found.");
             //System.out.println("NPC not found.");
             return;
         }
-        if (npcHomePosition == null || !player.getPosition().equals(npcHomePosition)) {
-            notify("You must be at " + npcName + "'s house to chat.");
-            //System.out.println("You must be at " + npcName + "'s house to chat.");
+        if (!canPerformAction(10)){
+            notify("❌ You don't have enough energy to chat. You need at least 10 energy.");
             return;
         }
+        
         player.reduceEnergy(10);
         gameState.advanceTime(10);
         npc.setHeartPoints(npc.getHeartPoints() + 10);
@@ -267,18 +279,18 @@ public class WorldActionController {
     }
 
     // Memberi hadiah ke NPC di rumah NPC
-    public void gift(String npcName, String itemName, Point npcHomePosition) {
+    public void gift(String npcName, String itemName) {
         NPC npc = NPCRegistry.get(npcName);
         if (npc == null) {
             notify("NPC not found.");
             //System.out.println("NPC not found.");
             return;
         }
-        if (npcHomePosition == null || !player.getPosition().equals(npcHomePosition)) {
-            notify("You must be at " + npcName + "'s house to give a gift.");
-            //System.out.println("You must be at " + npcName + "'s house to give a gift.");
+        if (!canPerformAction(5)){
+            notify("❌ You don't have enough energy to give a gift. You need at least 5 energy.");
             return;
         }
+        
         Item item = player.getInventory().getItem(itemName);
         if (item == null) {
             notify("You don't have " + itemName + " to give.");
@@ -299,6 +311,37 @@ public class WorldActionController {
         gameState.advanceTime(10);
         notify("You gave " + itemName + " to " + npcName + ". Heart points: " + (heartDelta >= 0 ? "+" : "") + heartDelta + ", -5 energy.");
         //System.out.println("You gave " + itemName + " to " + npcName + ". Heart points: " + (heartDelta >= 0 ? "+" : "") + heartDelta + ", -5 energy.");
+    }
+
+    // Belanja di toko neng emily
+    public void buy(String itemName, int quantity) {
+        if (!(gameState.getCurrentWorldLocation() instanceof Store store)) {
+            notify("❌ You must be in a store to buy items.");
+            return;
+        }
+    
+        Item itemToBuy = store.getInventory().getItem(itemName);
+        if (itemToBuy == null) {
+            notify("❌ Item not found in store: " + itemName);
+            return;
+        }
+    
+        int pricePerItem = Store.getBuyPrice(itemName);
+        if (pricePerItem == -1) {
+            notify("❌ No price found for item: " + itemName);
+            return;
+        }
+    
+        int totalPrice = pricePerItem * quantity;
+        if (player.getGold() < totalPrice) {
+            notify("❌ Not enough gold. You need " + totalPrice + " gold.");
+            return;
+        }
+    
+        // Process transaction
+        player.getInventory().addItem(itemToBuy, quantity);
+        player.setGold(player.getGold() - totalPrice);
+        notify("✅ Bought " + quantity + " x " + itemName + " for " + totalPrice + " gold.");
     }
 
     private void notify(String msg) {

@@ -26,7 +26,7 @@ public class NPCRegistry {
         TadiHated.removeAll(TadiLoved);
         TadiHated.removeAll(TadiLiked);
 
-                npcMap.put("Mayor Tadi", new NPC(
+        npcMap.put("Mayor Tadi", new NPC(
             "Mayor Tadi", 
             TadiLoved,
             TadiLiked, 
@@ -36,7 +36,7 @@ public class NPCRegistry {
             "Perry", 
             Set.of("Cranberry", "Blueberry"), 
             Set.of("Wine"),
-            Set.of("Trash")));
+            Set.of("Chub", "Carp", "Bullhead", "Sardine", "Largemouth Bass", "Rainbow Trout", "Sturgeon", "Midnight Carp", "Flounder", "Halibut", "Octopus", "Pufferfish", "Super Cucumber", "Catfish", "Salmon", "Angler", "Crimsonfish", "Glacierfish", "Legend")));
         npcMap.put("Caroline", new NPC(
             "Caroline",
             Set.of("Firewood", "Coal"),
