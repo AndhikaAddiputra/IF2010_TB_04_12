@@ -8,6 +8,7 @@ public class ControllerFactory {
     private final Player player;
     private final GameState gameState;
     private final FarmMap farmMap;
+    private final WorldMap worldMap = new WorldMap(); // Assuming WorldMap is needed for WorldActionController
     private final MessageListener messageListener;
     private final UserInputListener inputListener;
 
@@ -29,11 +30,11 @@ public class ControllerFactory {
     }
 
     public FishingController createFishingController() {
-        return new FishingController(player, gameState, farmMap, messageListener, inputListener);
+        return new FishingController(messageListener, inputListener);
     }
-
+    
     public WorldActionController createWorldActionController() {
-        return new WorldActionController(player, gameState, farmMap, messageListener, inputListener);
+        return new WorldActionController(player, worldMap, gameState, messageListener, inputListener);
     }
 
     // Tambahkan controller lainnya sesuai kebutuhan

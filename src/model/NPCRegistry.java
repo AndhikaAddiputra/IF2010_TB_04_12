@@ -23,8 +23,8 @@ public class NPCRegistry {
 
         // Create Mayor Tadi's hated items (all items minus loved and liked)
         Set<String> TadiHated = new HashSet<>(allItems);
-        perryHated.removeAll(perryLoved);
-        perryHated.removeAll(perryLiked);
+        TadiHated.removeAll(TadiLoved);
+        TadiHated.removeAll(TadiLiked);
 
                 npcMap.put("Mayor Tadi", new NPC(
             "Mayor Tadi", 

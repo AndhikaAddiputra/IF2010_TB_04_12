@@ -165,7 +165,7 @@ public class WorldActionController {
                 input = scanner.nextLine();
     
                 switch (input) {
-                    case "1" -> new FishingController().fish(player, gameState);
+                    case "1" -> new FishingController(messageListener, inputListener).fish(player, gameState);
                     case "2" -> inLocation = false;
                     case "3" -> {
                         back();

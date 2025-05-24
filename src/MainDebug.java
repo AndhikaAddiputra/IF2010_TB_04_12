@@ -26,13 +26,18 @@ public class MainDebug {
         player.getInventory().addItem(CropRegistry.getCrop("Pumpkin"), 1);
 
         // Buat controller
-        FarmActionController farmController = new FarmActionController(player, farmMap, null);
         GameState gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false);
-        farmController.setGameState(gameState);
-        gameState.setAutoSleepHandler(() -> farmController.sleep()); // handler autosleep nya
-        CookingController cookingController = new CookingController(player, gameState, farmMap);
-        FishingController fishingController = new FishingController();
-        WorldActionController worldController = new WorldActionController(player, worldMap, gameState);
+
+        FarmActionController farmController = new FarmActionController(
+            player, farmMap, gameState, null, null); // Pass null for CLI mode
+        
+        CookingController cookingController = new CookingController(
+            player, gameState, farmMap, null, null); // Pass null for CLI mode
+        
+        FishingController fishingController = new FishingController(null, null); // Pass null for CLI mode
+        
+        WorldActionController worldController = new WorldActionController(
+            player, worldMap, gameState, null, null); // Pass null for CLI mode
 
         // Interface input CLI
         Scanner scanner = new Scanner(System.in);
