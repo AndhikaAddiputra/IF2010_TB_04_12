@@ -229,7 +229,7 @@ public class FarmWindow extends JFrame implements MessageListener, UserInputList
                     label.setIcon(getTileIcon(tile)); 
                 }
         
-                label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                //label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
                 farmPanel.add(label);
             }
         }
