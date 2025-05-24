@@ -10,38 +10,38 @@ public class NPCRegistry {
     private static final Map<String, NPC> npcMap = new HashMap<>();
 
     static {
-        npcMap.put("Mayor Tadi", new NPC(
+                // Handle khusus untuk Mayor Tadi yang banyak mau
+        Set<String> allItems = new HashSet<>();
+        allItems.addAll(CropRegistry.getCropMap().keySet());
+        allItems.addAll(FishRegistry.getAllFishNames());
+        allItems.addAll(FoodRegistry.getFoodMap().keySet());
+        allItems.addAll(MiscRegistry.getAll().keySet());
+        
+                // Define Mayor Tadi's loved and liked items
+        Set<String> TadiLoved = Set.of("Legend");
+        Set<String> TadiLiked = Set.of("Angler", "Crimsonfish", "Glacierfish");
+
+        // Create Mayor Tadi's hated items (all items minus loved and liked)
+        Set<String> TadiHated = new HashSet<>(allItems);
+        perryHated.removeAll(perryLoved);
+        perryHated.removeAll(perryLiked);
+
+                npcMap.put("Mayor Tadi", new NPC(
             "Mayor Tadi", 
-            Set.of("Legend"), 
-            Set.of("Angler", "Crimsonfish", "Glacierfish"), 
+            TadiLoved,
+            TadiLiked, 
+            TadiHated));
+
+        npcMap.put("Perry", new NPC(
+            "Perry", 
+            Set.of("Cranberry", "Blueberry"), 
+            Set.of("Wine"),
             Set.of("Trash")));
         npcMap.put("Caroline", new NPC(
             "Caroline",
             Set.of("Firewood", "Coal"),
             Set.of("Potato", "Wheat"),
             Set.of("Hot Pepper")));
-
-        // Handle khusus untuk Perry yang banyak mau
-        Set<String> allItems = new HashSet<>();
-        allItems.addAll(CropRegistry.getCropMap().keySet());
-        allItems.addAll(FishRegistry.getAllFishNames());
-        allItems.addAll(FoodRegistry.getFoodMap().keySet());
-        allItems.addAll(MiscRegistry.getAll().keySet());
-
-        // Define Perry's loved and liked items
-        Set<String> perryLoved = Set.of("Cranberry", "Blueberry");
-        Set<String> perryLiked = Set.of("Wine");
-
-        // Create Perry's hated items (all items minus loved and liked)
-        Set<String> perryHated = new HashSet<>(allItems);
-        perryHated.removeAll(perryLoved);
-        perryHated.removeAll(perryLiked);
-
-        npcMap.put("Perry", new NPC(
-            "Perry", 
-            perryLoved,
-            perryLiked, 
-            perryHated));
 
         npcMap.put("Dasco", new NPC(
             "Dasco", 
@@ -50,7 +50,7 @@ public class NPCRegistry {
             Set.of("Legend", "Grape", "Cauliflower", "Wheat", "Pufferfish", "Salmon")));
         npcMap.put("Emily", new NPC(
             "Emily",
-            null,
+            Set.of("Parsnip Seeds", "Cauliflower Seeds", "Potato Seed", "Wheat Seeds", "Blueberry Seeds", "Tomato Seeds", "Hot Pepper Seeds", "Melon Seeds", "Corn Seeds", "Pumpkin Seeds","Grape Seeds"),
             Set.of("Catfish", "Salmon", "Sardine"),
             Set.of("Coal", "Wood")));
         npcMap.put("Abigail", new NPC(
