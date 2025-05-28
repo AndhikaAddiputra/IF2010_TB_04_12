@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.lang.Character;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import model.*;
 import utility.MusicPlayer;
 import utility.Season;
@@ -49,16 +51,49 @@ public class MainMenuWindow extends JFrame {
         // Buttons
         JButton startButton = new JButton("Start");
         JButton exitButton = new JButton("Exit");
+        startButton.setFocusPainted(false);
+        startButton.setForeground(Color.WHITE);
+        startButton.setBackground(new Color(34, 139, 34)); // forest green
+        startButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.WHITE, 2), new EmptyBorder(10, 20, 10, 20)));
+
+        exitButton.setFocusPainted(false);
+        exitButton.setForeground(Color.WHITE);
+        exitButton.setBackground(new Color(34, 139, 34)); // forest green
+        exitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.WHITE, 2), new EmptyBorder(10, 20, 10, 20)));
 
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        Font customFont = loadCustomFont(24f);
+        startButton.setFont(customFont);
+        exitButton.setFont(customFont);
 
         startButton.addActionListener(e -> openInputDialog());
         exitButton.addActionListener(e -> System.exit(0));
 
+        startButton.addMouseListener(new MouseAdapter() {
+        public void mouseEntered(MouseEvent evt) {
+            startButton.setBackground(new Color(50, 205, 50)); // lighter green
+        }
+
+        public void mouseExited(MouseEvent evt) {
+            startButton.setBackground(new Color(34, 139, 34)); // normal
+        }
+    });
+
+        exitButton.addMouseListener(new MouseAdapter() {
+        public void mouseEntered(MouseEvent evt) {
+            exitButton.setBackground(new Color(50, 205, 50)); // lighter green
+        }
+
+        public void mouseExited(MouseEvent evt) {
+            exitButton.setBackground(new Color(34, 139, 34)); // normal
+        }
+    });
+
         centerPanel.add(startButton);
         centerPanel.add(Box.createVerticalStrut(10));
         centerPanel.add(exitButton);
+
 
         // Add spacing at bottom
         centerPanel.add(Box.createVerticalGlue());
@@ -96,6 +131,16 @@ public class MainMenuWindow extends JFrame {
             }
         });
     }
+
+    private Font loadCustomFont(float size) {
+    try {
+        Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/assets/SVBold.ttf"));
+        return font.deriveFont(size);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new Font("SansSerif", Font.PLAIN, (int) size); // fallback
+    }
+}
 
     private void openInputDialog() {
         JPanel inputPanel = new JPanel(new GridLayout(3, 2, 10, 10));
@@ -162,4 +207,3 @@ public class MainMenuWindow extends JFrame {
         dispose(); // Close main menu
     }
 }
-
