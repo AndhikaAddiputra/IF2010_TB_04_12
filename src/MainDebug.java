@@ -26,7 +26,7 @@ public class MainDebug {
         player.getInventory().addItem(CropRegistry.getCrop("Pumpkin"), 1);
 
         // Buat controller
-        GameState gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false);
+        GameState gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false, null);
 
         FarmActionController farmController = new FarmActionController(
             player, farmMap, gameState, null, null); // Pass null for CLI mode

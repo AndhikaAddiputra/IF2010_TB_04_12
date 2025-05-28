@@ -1,6 +1,3 @@
-import controller.FarmActionController;
-import controller.FishingController;
-import controller.WorldActionController;
 import javax.swing.SwingUtilities;
 import model.*;
 import utility.Season;
@@ -25,15 +22,11 @@ public class MainGUI {
         player.getInventory().addItem(EquipmentRegistry.getEquipment("Watering Can"), 1);
         player.getInventory().addItem(EquipmentRegistry.getEquipment("Pickaxe"), 1);
 
-        GameState gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false);
+        GameState gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false, null);
         FarmWindow window = new FarmWindow(player, farmMap, gameState, worldMap);
-        FarmActionController farmController = new FarmActionController(player, farmMap, gameState, window, window);
-        FishingController fishingController = new FishingController(window, window);
-        WorldActionController worldController = new WorldActionController(player, worldMap, gameState, window, window);
 
-        window.setFarmController(farmController);
-        window.setFishingController(fishingController);
-        window.setWorldController(worldController);
+        gameState = new GameState(Weather.SUNNY, Season.SPRING, farmMap, player, false, window);
+        window.setGameState(gameState);
 
         SwingUtilities.invokeLater(() -> {
             window.setVisible(true);
