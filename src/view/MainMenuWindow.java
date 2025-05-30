@@ -112,7 +112,7 @@ public class MainMenuWindow extends JFrame {
                     "- Andhika M. Addiputra (Backend and Frontend)\n" +
                     "- Kevin Azra (Frontend)\n" +
                     "- Zheanetta Apple (Frontend)\n" +
-                    "- Jason Samuel (Frontend)", 
+                    "- Jason Samuel (Design)", 
                     "Credits", 
                     JOptionPane.INFORMATION_MESSAGE);    
             }
