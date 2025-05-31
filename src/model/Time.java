@@ -33,4 +33,9 @@ public class Time implements Comparable<Time> {
         if (this.hour != other.hour) return this.hour - other.hour;
         return this.minute - other.minute;
     }
+
+    public String formatTimeRange(Time endTime) {
+        return String.format("%02d:%02d - %02d:%02d", 
+            this.hour, this.minute, endTime.hour, endTime.minute);
+    }
 }

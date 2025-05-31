@@ -710,9 +710,12 @@ public class FarmWindow extends JFrame implements MessageListener, UserInputList
         
         for (Fish fish : FishRegistry.getAllFish()) {
             if (fish.getSeason().contains(gameState.getSeason())) {
+                Range<Time> timeRange = fish.getAvailableTime().iterator().next(); 
+                Time startTime = timeRange.getStart();
+                Time endTime = timeRange.getEnd();  
                 fishInfo.append("• ").append(fish.getItemName())
                        .append(" (").append(fish.getType()).append(")\n");
-                fishInfo.append("  Time: ").append(fish.getAvailableTime()).append("\n");
+                fishInfo.append("  Time: ").append(startTime.formatTimeRange(endTime)).append("\n");
                 fishInfo.append("  Weather: ").append(fish.getWeather()).append("\n");
                 fishInfo.append("  Location: ").append(fish.getLocation()).append("\n");
                 fishInfo.append("  Price: ").append(fish.getPrice()).append(" gold\n\n");
