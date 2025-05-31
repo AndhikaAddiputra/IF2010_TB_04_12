@@ -358,8 +358,6 @@ public class MainMenuWindow extends JFrame {
     
         // Add starter items to inventory
         player.getInventory().addItem(SeedsRegistry.getSeeds("Wheat Seeds"), 5);
-        player.getInventory().addItem(CropRegistry.getCrop("Wheat"), 5);
-        player.getInventory().addItem(FishRegistry.getFish("Salmon"), 3);
         player.getInventory().addItem(RecipeRegistry.getRecipe("Baguette Recipe"), 1);
         player.getInventory().addItem(RecipeRegistry.getRecipe("Pumpkin Pie Recipe"), 1);
         player.getInventory().addItem(RecipeRegistry.getRecipe("Wine Recipe"), 1);

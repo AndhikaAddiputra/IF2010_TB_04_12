@@ -650,8 +650,10 @@ public class FarmWindow extends JFrame implements MessageListener, UserInputList
         // Financial Statistics
         int totalIncome = farmController.getGoldIncome();
         int totalExpenditure = worldController.getGoldExpenditure();
-        int totalIncomePerSeason = totalIncome / gameState.getTotalSeason();
-        int totalExpenditurePerSeason = totalExpenditure / gameState.getTotalSeason();
+        int totalSeasons = Math.max(1, gameState.getTotalSeason());
+        float totalIncomePerSeason = (float) totalIncome / totalSeasons;
+        float totalExpenditurePerSeason = (float) totalExpenditure / totalSeasons;
+        
         stats.append("💰 Financial Statistics\n");
         stats.append("Total Income: ").append(totalIncome).append(" gold\n");
         stats.append("Total Expenditure: ").append(totalExpenditure).append(" gold\n");

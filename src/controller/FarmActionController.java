@@ -12,9 +12,9 @@ public class FarmActionController {
     private GameState gameState;
     private MessageListener messageListener;
     private UserInputListener userInputListener;
-    private int goldIncome = 0;
+    private static int goldIncome = 0;
     //private int goldExpenditure = 0;
-    private int cropsHarvested = 0;
+    private static int cropsHarvested = 0;
 
     public FarmActionController(Player player, FarmMap farmMap, GameState gameState, MessageListener messageListener, UserInputListener userInputListener) {
         this.player = player;
