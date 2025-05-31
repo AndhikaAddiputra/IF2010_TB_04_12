@@ -12,6 +12,9 @@ public class FarmActionController {
     private GameState gameState;
     private MessageListener messageListener;
     private UserInputListener userInputListener;
+    private int goldIncome = 0;
+    //private int goldExpenditure = 0;
+    private int cropsHarvested = 0;
 
     public FarmActionController(Player player, FarmMap farmMap, GameState gameState, MessageListener messageListener, UserInputListener userInputListener) {
         this.player = player;
@@ -154,9 +157,9 @@ public class FarmActionController {
             gameState.advanceTime(5 * units);
             tile.setType(TileType.TILLABLE);
             tile.clearSeed();
+            cropsHarvested += units;
             notify("You harvested: " + units + " unit(s) of " + crop.getItemName());
         }
-        //System.out.println("You harvested: " + units + " unit(s) of " + crop.getItemName());
     }
 
     public void recoverLand(){
@@ -318,6 +321,7 @@ public class FarmActionController {
                 notify("🛒 Selling " + qty + " x " + selected.getItemName() + " for " + total + " gold...");
                 inventory.removeItem(selected.getItemName(), qty);
                 player.setGold(player.getGold() + total);
+                goldIncome += total;
                 gameState.advanceTime(15);
                 notify("💰 You received " + total + " gold.");
             });
@@ -351,6 +355,14 @@ public class FarmActionController {
             System.out.println("Planted Seed: " + tile.getSeed().getItemName());
             System.out.println("Remaining Time to Harvest: " + tile.getRemainingHarvestTime());
         }
+    }
+
+    public int getGoldIncome() {
+        return goldIncome;
+    }
+
+    public int getCropsHarvested() {
+        return cropsHarvested;
     }
 }
 

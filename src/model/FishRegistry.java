@@ -3,7 +3,6 @@ package model;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import utility.Season;
 import utility.Weather;
 
@@ -48,7 +47,7 @@ public class FishRegistry {
             Set.of(normalDay),
             Set.of(Weather.SUNNY, Weather.RAINY), 
             Set.of(new MountainLake()),
-            "Reguler Fish", 40));
+            "Regular Fish", 40));
 
         fishMap.put("Rainbow Trout", new Fish(
             "Rainbow Trout",
@@ -56,7 +55,7 @@ public class FishRegistry {
             Set.of(normalDay),
             Set.of(Weather.SUNNY), 
             Set.of(new MountainLake(), new ForestRiver()),
-            "Reguler Fish", 160));
+            "Regular Fish", 160));
 
         fishMap.put("Sturgeon", new Fish(
             "Sturgeon",
@@ -64,7 +63,7 @@ public class FishRegistry {
             Set.of(normalDay),
             Set.of(Weather.SUNNY, Weather.RAINY), 
             Set.of(new MountainLake()),
-            "Reguler Fish", 40));
+            "Regular Fish", 40));
 
         fishMap.put("Midnight Carp", new Fish(
             "Midnight Carp",
@@ -72,7 +71,7 @@ public class FishRegistry {
             Set.of(new Range<>(new Time(20, 0), new Time(2, 0))),
             Set.of(Weather.SUNNY, Weather.RAINY), 
             Set.of(new MountainLake(), new PondLocation()),
-            "Reguler Fish", 80));
+            "Regular Fish", 80));
 
         fishMap.put("Flounder", new Fish(
             "Flounder",
@@ -86,35 +85,35 @@ public class FishRegistry {
             Set.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER),
             Set.of(new Range<>(new Time(6,0), new Time(11,0)), new Range<>(new Time(19,0), new Time(2,0))),
             Set.of(Weather.SUNNY, Weather.RAINY), 
-            Set.of(new Ocean()), "Reguler Fish", 40));
+            Set.of(new Ocean()), "Regular Fish", 40));
         
         fishMap.put("Octopus", new Fish(
             "Octopus",
             Set.of(Season.SUMMER), 
             Set.of(extraDay),
             Set.of(Weather.SUNNY, Weather.RAINY), 
-            Set.of(new Ocean()), "Reguler Fish", 120));
+            Set.of(new Ocean()), "Regular Fish", 120));
 
         fishMap.put("Pufferfish", new Fish(
             "Pufferfish",
             Set.of(Season.SUMMER), 
             Set.of(new Range<>(new Time(0,0), new Time(16,0))),
             Set.of(Weather.SUNNY), 
-            Set.of(new Ocean()), "Reguler Fish", 240));
+            Set.of(new Ocean()), "Regular Fish", 240));
 
         fishMap.put("Sardine", new Fish(
             "Sardine",
             Set.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 
             Set.of(normalDay),
             Set.of(Weather.SUNNY, Weather.RAINY), 
-            Set.of(new Ocean()), "Reguler Fish", 40));
+            Set.of(new Ocean()), "Regular Fish", 40));
 
         fishMap.put("Super Cucumber", new Fish(
             "Super Cucumber", 
             Set.of(Season.SUMMER, Season.FALL, Season.WINTER), 
             Set.of(new Range<>(new Time(18,0), new Time(2,0))),
             Set.of(Weather.SUNNY, Weather.RAINY), 
-            Set.of(new Ocean()), "Reguler Fish", 80));
+            Set.of(new Ocean()), "Regular Fish", 80));
 
         fishMap.put("Catfish", new Fish(
             "Catfish",
@@ -122,14 +121,14 @@ public class FishRegistry {
             Set.of(extraDay),
             Set.of(Weather.RAINY), 
             Set.of(new ForestRiver(), new PondLocation()),
-            "Reguler Fish", 40));
+            "Regular Fish", 40));
 
         fishMap.put("Salmon", new Fish(
             "Salmon",
             Set.of(Season.FALL), 
             Set.of(normalDay),
             Set.of(Weather.SUNNY, Weather.RAINY), 
-            Set.of(new ForestRiver()), "Reguler Fish", 160));
+            Set.of(new ForestRiver()), "Regular Fish", 160));
 
         // Legendry Fish
         fishMap.put("Angler", new Fish(

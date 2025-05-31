@@ -71,4 +71,5 @@ public class NPCRegistry {
     public static Set<String> getAllNames() {
         return npcMap.keySet();
     }
+
 }

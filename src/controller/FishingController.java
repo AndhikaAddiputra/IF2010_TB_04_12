@@ -13,6 +13,10 @@ public class FishingController {
     private final Random random = new Random();
     private MessageListener messageListener;
     private UserInputListener userInputListener;
+    private static int fishCaught = 0;
+    private static int fishCaughtCommon = 0;
+    private static int fishCaughtRegular = 0;
+    private static int fishCaughtLegendary = 0;
 
     public FishingController(MessageListener messageListener, UserInputListener userInputListener) {
         this.messageListener = messageListener;
@@ -79,13 +83,11 @@ public class FishingController {
                 upperBound = 100;
                 maxAttempts = 10;
         }
-
+        
         int target = random.nextInt(upperBound) + 1;
 
         notify("🎣 You cast your line...");
         notify("💡 A " + selectedFish.getItemName() + " is biting! Guess a number between 1 and " + upperBound + ". It's a common fish!" + selectedFish.getType());
-        //System.out.println("🎣 You cast your line...");
-        //System.out.println("💡 A " + selectedFish.getItemName() + " is biting! Guess a number between 1 and " + upperBound+ ". It's a common fish!" +selectedFish.getType());
 
         // 6. Pause waktu, -5 energi, +15 menit setelah selesai
         player.setEnergy(player.getEnergy() - 5);
@@ -94,6 +96,12 @@ public class FishingController {
             () -> {
                 // success: tambahkan ikan ke inventory
                 player.getInventory().addItem(selectedFish, 1);
+                fishCaught++;
+                switch (selectedFish.getType()) {
+                    case "Common Fish" -> fishCaughtCommon++;
+                    case "Regular Fish" -> fishCaughtRegular++;
+                    case "Legendary Fish" -> fishCaughtLegendary++;
+                }
                 notify("🎣 " + selectedFish.getItemName() + " added to inventory.");
             },
             () -> {
@@ -147,6 +155,22 @@ public class FishingController {
         } else {
             System.out.println(msg); // fallback CLI
         }
+    }
+
+    public int getFishCaught() {
+        return fishCaught;
+    }
+
+    public int getFishCaughtCommon() {
+        return fishCaughtCommon;
+    }
+
+    public int getFishCaughtRegular() {
+        return fishCaughtRegular;
+    }
+
+    public int getFishCaughtLegendary() {
+        return fishCaughtLegendary;
     }
 
 }

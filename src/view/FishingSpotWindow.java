@@ -15,17 +15,16 @@ public class FishingSpotWindow extends JFrame implements MessageListener, UserIn
     private final Player player;
     private final Location location;
     private final GameState gameState;
-    private final FishingController fishingController;
+    private FishingController fishingController;
     private final JTextArea messageBox;
 
     private JPanel buttonPanel;
 
-    public FishingSpotWindow(Player player, Location location, GameState gameState) {
+    public FishingSpotWindow(Player player, Location location, GameState gameState, FishingController fishingController) {
         this.player = player;
         this.location = location;
         this.gameState = gameState;
-        // Fix: Pass correct parameters to FishingController
-        this.fishingController = new FishingController(this, this);
+        this.fishingController = fishingController;
 
         setTitle("Fishing at " + location.getName());
         setSize(800, 600);

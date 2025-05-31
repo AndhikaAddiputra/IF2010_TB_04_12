@@ -16,7 +16,7 @@ public class NPCWindow extends JFrame implements MessageListener, UserInputListe
     private final NPC npc;
     private final GameState gameState;
     private final ControllerFactory controllerFactory;
-    private final WorldActionController worldController;
+    private WorldActionController worldController;
     private final JTextArea messageBox;
 
     private JPanel buttonPanel;
@@ -116,6 +116,10 @@ public class NPCWindow extends JFrame implements MessageListener, UserInputListe
         add(npcHouseImage, BorderLayout.CENTER);
         add(rightPanel, BorderLayout.EAST);
         add(scroll, BorderLayout.SOUTH);
+    }
+
+    public void setWorldController(WorldActionController controller) {
+        this.worldController = controller;
     }
 
     private JPanel makeItemList(Set<String> items) {

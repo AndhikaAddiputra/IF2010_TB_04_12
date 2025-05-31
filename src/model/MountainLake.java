@@ -8,6 +8,7 @@ public class MountainLake implements FishingSpot{
         return name;
     }
 
+    
     @Override
     public void visit(Player player) {
         System.out.println("Visiting " + name);

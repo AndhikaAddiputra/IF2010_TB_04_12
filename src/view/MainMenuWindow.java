@@ -362,6 +362,8 @@ public class MainMenuWindow extends JFrame {
         player.getInventory().addItem(FishRegistry.getFish("Salmon"), 3);
         player.getInventory().addItem(RecipeRegistry.getRecipe("Baguette Recipe"), 1);
         player.getInventory().addItem(RecipeRegistry.getRecipe("Pumpkin Pie Recipe"), 1);
+        player.getInventory().addItem(RecipeRegistry.getRecipe("Wine Recipe"), 1);
+        player.getInventory().addItem(RecipeRegistry.getRecipe("Spakbor Salad Recipe"), 1);
         player.getInventory().addItem(MiscRegistry.getMisc("Coal"), 5);
         player.getInventory().addItem(EquipmentRegistry.getEquipment("Hoe"), 1);
         player.getInventory().addItem(EquipmentRegistry.getEquipment("Watering Can"), 1);

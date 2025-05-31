@@ -10,6 +10,8 @@ public class VisitPanel extends JFrame {
     private final GameState gameState;
     private final FarmMap farmMap;
     private final ControllerFactory controllerFactory;
+    private final WorldActionController worldController;
+    private final FishingController fishingController;
 
     public VisitPanel(Player player, GameState gameState, FarmMap farmMap) {
         this.player = player;
@@ -17,6 +19,8 @@ public class VisitPanel extends JFrame {
         this.farmMap = farmMap;
 
         this.controllerFactory = new ControllerFactory(player, gameState, farmMap, this::showMessage, this::requestInput);
+        this.worldController = controllerFactory.createWorldActionController();
+        this.fishingController = worldController.getFishingController();
 
         setTitle("Visit Locations");
         setSize(400, 500);
@@ -70,18 +74,28 @@ public class VisitPanel extends JFrame {
     private void openLocationWindow(Location location) {
         if (location instanceof NPCBuilding npc) {
             NPC npcLocation = npc.getNPC();
-            if (npc != null) {
+            if (npcLocation != null) {
+                worldController.incrementVisitCount();
                 NPCWindow npcWindow = new NPCWindow(player, npcLocation, gameState);
+                npcWindow.setWorldController(worldController); // Pass controller to NPCWindow
+                npcWindow.setLocationRelativeTo(this);
                 npcWindow.setVisible(true);
             } else {
                 showMessage("❌ Could not find NPC.");
             }
         } else if (location instanceof Store store) {
+            worldController.incrementVisitCount();
             StoreWindow storeWindow = new StoreWindow(player, store, gameState);
             storeWindow.setVisible(true);
         } else if (location instanceof ForestRiver || location instanceof MountainLake || location instanceof Ocean) {
-            FishingSpotWindow fishingWindow = new FishingSpotWindow(player, location, gameState);
-            fishingWindow.setVisible(true);
+            FishingSpotWindow fishingWindow = new FishingSpotWindow(
+            player, 
+            location, 
+            gameState,
+            fishingController // Pass the controller
+        );
+        fishingWindow.setLocationRelativeTo(this);
+        fishingWindow.setVisible(true);
         } else {
             showMessage("🚫 No window implemented for this location.");
         }

@@ -11,6 +11,12 @@ public class WorldActionController {
     private GameState gameState;
     private MessageListener messageListener;
     private UserInputListener inputListener;
+    private static int goldExpenditure = 0;
+    private static int freqChatting = 0;
+    private static int freqGifting = 0;
+    private static int visitNPCcount = 0;
+
+    private final FishingController fishingController;
 
     public WorldActionController(Player player, WorldMap worldMap, GameState gameState, MessageListener messageListener, UserInputListener userInputListener) {
         this.player = player;
@@ -18,10 +24,16 @@ public class WorldActionController {
         this.gameState = gameState;
         this.messageListener = messageListener;
         this.inputListener = userInputListener;
+
+        this.fishingController = new FishingController(messageListener, userInputListener);
     }
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+    }
+
+    public FishingController getFishingController() {
+        return fishingController;
     }
 
     private boolean canPerformAction(int energyCost) {
@@ -115,6 +127,7 @@ public class WorldActionController {
     
         while (inLocation) {
             if (location instanceof NPCBuilding) {
+                incrementVisitCount();
                 System.out.println("\n📍 You are at: " + location.getName());
                 System.out.println("Available actions:");
                 System.out.println("1. Chat");
@@ -167,7 +180,7 @@ public class WorldActionController {
                 input = scanner.nextLine();
     
                 switch (input) {
-                    case "1" -> new FishingController(messageListener, inputListener).fish(player, gameState);
+                    case "1" -> fishingController.fish(player, gameState);
                     case "2" -> inLocation = false;
                     case "3" -> {
                         back();
@@ -216,6 +229,7 @@ public class WorldActionController {
         npc.setStatus(RelationshipStatus.FIANCE);
         player.reduceEnergy(10);
         gameState.advanceTime(60);
+        player.setPartner(npc, npc.getStatus().getStatusString());
         notify("Congratulations! " + npcName + " accepted your proposal.");
         //System.out.println("Congratulations! " + npcName + " accepted your proposal.");
     }
@@ -275,6 +289,7 @@ public class WorldActionController {
         gameState.advanceTime(10);
         npc.setHeartPoints(npc.getHeartPoints() + 10);
         notify("You chatted with " + npcName + ". +10 heart points, -10 energy.");
+        freqChatting++;
         //System.out.println("You chatted with " + npcName + ". +10 heart points, -10 energy.");
     }
 
@@ -309,6 +324,7 @@ public class WorldActionController {
         player.getInventory().removeItem(itemName, 1);
         player.reduceEnergy(5);
         gameState.advanceTime(10);
+        freqGifting++;
         notify("You gave " + itemName + " to " + npcName + ". Heart points: " + (heartDelta >= 0 ? "+" : "") + heartDelta + ", -5 energy.");
         //System.out.println("You gave " + itemName + " to " + npcName + ". Heart points: " + (heartDelta >= 0 ? "+" : "") + heartDelta + ", -5 energy.");
     }
@@ -341,6 +357,7 @@ public class WorldActionController {
         // Process transaction
         player.getInventory().addItem(itemToBuy, quantity);
         player.setGold(player.getGold() - totalPrice);
+        goldExpenditure += totalPrice;
         notify("✅ Bought " + quantity + " x " + itemName + " for " + totalPrice + " gold.");
     }
 
@@ -350,5 +367,25 @@ public class WorldActionController {
         } else {
             System.out.println(msg); // fallback CLI
         }
+    }
+
+    public int getGoldExpenditure() {
+        return goldExpenditure;
+    }
+
+    public int getFreqChatting() {
+        return freqChatting;
+    }
+
+    public int getFreqGifting() {
+        return freqGifting;
+    } 
+    
+    public void incrementVisitCount() {
+        visitNPCcount++;
+    }
+    
+    public int getVisitNPCcount() {
+        return visitNPCcount;
     }
 }

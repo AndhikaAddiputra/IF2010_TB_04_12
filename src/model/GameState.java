@@ -18,7 +18,8 @@ public class GameState {
 
     private boolean playerSlept = false;
     private Runnable autoSleepHandler;
-    private Integer day;
+    private Integer totalDay;
+    private Integer totalSeason;
 
     private MessageListener messageListener;
 
@@ -38,7 +39,7 @@ public class GameState {
         this.farmMap = farmMap;
         this.player = player;
         this.showTime = showTime;
-        this.day = 1; // Start at day 1
+        this.totalDay = 1; // Start at day 1
         this.messageListener = messageListener;
 
         Thread timeThread = new Thread(() -> {
@@ -116,10 +117,10 @@ public class GameState {
     }
 
     public void advanceDay() {
-        day++;
+        totalDay++;
         farmMap.tick(24 * 60); // Simulate a full day tick
-        if (day > 10) {
-            day = 1;
+        if (totalDay > 10) {
+            totalDay = 1;
             season = season.next();
             farmMap.killOutOfSeasonCrops(season);
         } 
@@ -174,4 +175,14 @@ public class GameState {
             }
         }
     }
+
+    public Integer getTotalDay() {
+        return totalDay;
+    }
+
+    public Integer getTotalSeason() {
+        return totalDay / 10 + 1;
+    }
+
+
 }
